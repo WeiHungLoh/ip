@@ -73,7 +73,12 @@ public class Duet {
                 Task currentTask = messages.get(messages.size() - 1); 
                 System.out.println("Got it. I've added this task:");
                 System.out.println("  " + currentTask.toString());
-                System.out.println("Now you have " + messages.size() + " tasks in the list.");
+                
+                if (messages.size() > 1) {
+                    System.out.println("Now you have " + messages.size() + " tasks in the list");
+                } else {
+                    System.out.println("Now you have " + messages.size() + " task in the list");
+                }
             } else if (command[0].equals("event")) {
                 String desc = "";
                 String[] descArray = dates[0].split(" ");
@@ -114,7 +119,12 @@ public class Duet {
                 Task currentTask = messages.get(messages.size() - 1); 
                 System.out.println("Got it. I've added this task:");
                 System.out.println("  " + currentTask.toString());
-                System.out.println("Now you have " + messages.size() + " tasks in the list");
+
+                if (messages.size() > 1) {
+                    System.out.println("Now you have " + messages.size() + " tasks in the list");
+                } else {
+                    System.out.println("Now you have " + messages.size() + " task in the list");
+                }
             } else if (command[0].equals("todo")) {
                 String desc = "";
 
@@ -127,7 +137,12 @@ public class Duet {
                 Task currentTask = messages.get(messages.size() - 1); 
                 System.out.println("Got it. I've added this task:");
                 System.out.println("  "+ currentTask.toString());
-                System.out.println("Now you have " + messages.size() + " in the list.");
+                
+                if (messages.size() > 1) {
+                    System.out.println("Now you have " + messages.size() + " tasks in the list");
+                } else {
+                    System.out.println("Now you have " + messages.size() + " task in the list");
+                }
             } else {
                 messages.add(new Task(message));
                 System.out.println("added: " + message);
