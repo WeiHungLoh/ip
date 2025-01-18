@@ -1,5 +1,5 @@
 /**
- * Encapsulates a ToDo task added by user through Duet chatbot
+ * Encapsulates a ToDo task added by user through Duet chatbot.
  * 
  * @author: Loh Wei Hung
  */
@@ -9,9 +9,9 @@ public class ToDo extends Task{
     }
 
     /**
-     * Return the string representation of a Todo task
+     * Return the string representation of a Todo task.
      * 
-     * @return A string consists of ToDo description
+     * @return A string consists of ToDo description.
      */
     @Override
     public String toString() {

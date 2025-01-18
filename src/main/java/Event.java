@@ -1,5 +1,5 @@
 /**
- * Encapsulates an event added by user through Duet chatbot
+ * Encapsulates an event added by user through Duet chatbot.
  * 
  * @author: Loh Wei Hung
  */
@@ -14,9 +14,9 @@ public class Event extends Task {
     }
     
     /**
-     * Return the string representation of this event
+     * Return the string representation of this event.
      * 
-     * @return A string consists of description, dates and time of from and to
+     * @return A string consists of description, dates and time of from and to.
      */
     @Override
     public String toString() {
