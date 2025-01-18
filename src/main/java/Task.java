@@ -1,5 +1,5 @@
 /**
- * The Task class represents a task added by users through Duet's chatbot.
+ * The Task class represents a task added by users through Duet chatbot.
  * It encapsulates description and completion status of task.
  * 
  * @author: Loh Wei Hung
@@ -43,5 +43,15 @@ public class Task {
      */
     public String getDescription() {
         return this.description;
+    }
+
+    /**
+     * Return the string description of task
+     * 
+     * @return A string consists of description and completion status of task
+     */
+    @Override
+    public String toString() {
+        return "[" + getStatusIcon() + "] " + this.description;
     }
 }
