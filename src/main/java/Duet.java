@@ -46,13 +46,31 @@ public class Duet {
                 System.out.println("OK, I've marked this task as not done yet:");
                 System.out.println("  [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription());
             } else if (command[0].equals("deadline")) {
+                if (message.trim().equals("deadline")) {
+                    try {
+                        throw new EmptyInputException("The description for deadline cannot be empty.");
+                    } catch (EmptyInputException e) {
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
+                }
+
+                if (dates.length == 1) {
+                    try {
+                        throw new InvalidInputException("Invalid deadline command.");
+                    } catch (InvalidInputException e) {
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
+                }
+
                 String desc = "";
                 String[] descArray = dates[0].split(" ");
                 
                 for (int j = 1; j < descArray.length; j++) {
                     if (j > 1) {
                         desc += " ";
-                    }
+                    } 
 
                     desc += descArray[j];
                 }
@@ -64,11 +82,11 @@ public class Duet {
                 for (int i = 1; i < dueDate.length; i++) {
                     if (i > 1) {
                         date += " ";
-                    }
+                    } 
 
                     date += dueDate[i];
                 }
-
+            
                 messages.add(new Deadline(desc, date));
                 Task currentTask = messages.get(messages.size() - 1); 
                 System.out.println("Got it. I've added this task:");
@@ -80,6 +98,24 @@ public class Duet {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
             } else if (command[0].equals("event")) {
+                if (message.trim().equals("event")) {
+                    try {
+                        throw new EmptyInputException("The description for event cannot be empty.");
+                    } catch (EmptyInputException e) {
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
+                }
+
+                if (dates.length == 1) {
+                    try {
+                        throw new InvalidInputException("Invalid event command.");
+                    } catch (InvalidInputException e) {
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
+                }
+
                 String desc = "";
                 String[] descArray = dates[0].split(" ");
 
@@ -126,6 +162,15 @@ public class Duet {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
             } else if (command[0].equals("todo")) {
+                if (message.trim().equals("todo")) {
+                    try {
+                        throw new EmptyInputException("The description for todo cannot be empty.");
+                    } catch (EmptyInputException e) {
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
+                }
+
                 String desc = "";
 
                 for (int i = 1; i < command.length; i++) {
@@ -145,6 +190,13 @@ public class Duet {
                     System.out.println("Now you have " + messages.size() + " tasks in the list.");
                 } else {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
+                }
+            } else if (message.equals("")) {
+                try {
+                    throw new EmptyInputException("The description cannot be empty.");
+                } catch (EmptyInputException e) {
+                    System.out.println(e.getMessage());
+                    continue;
                 }
             } else {
                 messages.add(new Task(message));
