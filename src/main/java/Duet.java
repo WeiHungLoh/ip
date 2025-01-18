@@ -1,6 +1,13 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Represents main class for Duet chatbot application.
+ * Duet is a chatbot to help users manage a list of tasks to perform.
+ * Users can add, mark, unmark, list, delete tasks.
+ * 
+ * @author: Loh Wei Hung
+ */
 public class Duet {
     public static void main(String[] args) {
         System.out.println("Hello! I'm Duet");
