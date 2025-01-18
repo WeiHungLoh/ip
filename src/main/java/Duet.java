@@ -205,6 +205,36 @@ public class Duet {
                     System.out.println(e.getMessage());
                     continue;
                 }
+            } else if (command[0].equals("delete")) {
+                if (message.trim().equals("delete")) {
+                    try {
+                        throw new EmptyInputException("The description for delete cannot be empty.");
+                    } catch (EmptyInputException e) {
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
+                }
+
+                if (Integer.parseInt(command[1]) > messages.size()) {
+                    try {
+                        throw new InvalidInputException("The task that you want to delete does not exist.");
+                    } catch (InvalidInputException e) {
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
+                }
+
+                int idx = Integer.parseInt(command[1]) - 1; // decrements index since ArrayList is zero-indexed
+                Task deletedTask = messages.get(idx); 
+                messages.remove(idx);
+                System.out.println("Noted. I've removed this task:");
+                System.out.println("  " + deletedTask.toString());
+                
+                if (messages.size() > 1) {
+                    System.out.println("Now you have " + messages.size() + " tasks in the list.");
+                } else {
+                    System.out.println("Now you have " + messages.size() + " task in the list.");
+                }
             } else {
                 messages.add(new Task(message));
                 System.out.println("added: " + message);
