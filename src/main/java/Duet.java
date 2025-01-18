@@ -215,7 +215,7 @@ public class Duet {
                     }
                 }
 
-                if (Integer.parseInt(command[1]) > messages.size()) {
+                if (Integer.parseInt(command[1]) > messages.size() || Integer.parseInt(command[1]) < 1) {
                     try {
                         throw new InvalidInputException("The task that you want to delete does not exist.");
                     } catch (InvalidInputException e) {
