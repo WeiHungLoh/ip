@@ -41,7 +41,8 @@ public class Duet {
 
                 messages.get(idx).markAsDone();;
                 System.out.println("Nice! I've marked this task as done:");
-                System.out.println("  [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription());
+                System.out.println("  [" + messages.get(idx).getStatusIcon() + "] " 
+                    + messages.get(idx).getDescription());
             } else if (command[0].equals("unmark")) {
                 int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
 
@@ -51,7 +52,8 @@ public class Duet {
 
                 messages.get(idx).unmarkAsDone();
                 System.out.println("OK, I've marked this task as not done yet:");
-                System.out.println("  [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription());
+                System.out.println("  [" + messages.get(idx).getStatusIcon() + "] " 
+                    + messages.get(idx).getDescription());
             } else if (command[0].equals("deadline")) {
                 if (message.trim().equals("deadline")) {
                     try {
@@ -78,7 +80,6 @@ public class Duet {
                     if (j > 1) {
                         desc += " ";
                     } 
-
                     desc += descArray[j];
                 }
 
