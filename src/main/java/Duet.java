@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,12 +12,16 @@ import java.util.Scanner;
  * @author: Loh Wei Hung
  */
 public class Duet {
+    private static final String FILE_NAME = "./data/duet.txt";
+
     public static void main(String[] args) {
+
         System.out.println("Hello! I'm Duet");
         System.out.println("What can I do for you?");
         
         Scanner scan = new Scanner(System.in);
         ArrayList<Task> messages = new ArrayList<>();
+        loadTasks(messages);
 
         while (true) {
             String message = scan.nextLine(); 
@@ -43,6 +50,7 @@ public class Duet {
                 System.out.println("Nice! I've marked this task as done:");
                 System.out.println("  [" + messages.get(idx).getStatusIcon() + "] " 
                     + messages.get(idx).getDescription());
+                saveTasks(messages);
             } else if (command[0].equals("unmark")) {
                 int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
 
@@ -54,6 +62,7 @@ public class Duet {
                 System.out.println("OK, I've marked this task as not done yet:");
                 System.out.println("  [" + messages.get(idx).getStatusIcon() + "] " 
                     + messages.get(idx).getDescription());
+                saveTasks(messages);
             } else if (command[0].equals("deadline")) {
                 if (message.trim().equals("deadline")) {
                     try {
@@ -105,6 +114,7 @@ public class Duet {
                 } else {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
+                saveTasks(messages);
             } else if (command[0].equals("event")) {
                 if (message.trim().equals("event")) {
                     try {
@@ -169,6 +179,7 @@ public class Duet {
                 } else {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
+                saveTasks(messages);
             } else if (command[0].equals("todo")) {
                 if (message.trim().equals("todo")) {
                     try {
@@ -199,6 +210,7 @@ public class Duet {
                 } else {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
+                saveTasks(messages);
             } else if (message.equals("")) {
                 try {
                     throw new EmptyInputException("The description cannot be empty.");
@@ -236,12 +248,98 @@ public class Duet {
                 } else {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
+                saveTasks(messages);
             } else {
                 messages.add(new Task(message));
                 System.out.println("added: " + message);
+                saveTasks(messages);
             }
         }
 
         scan.close();
     }
+
+    private static void saveTasks(ArrayList<Task> tasks) {
+        try {
+            FileWriter fw = new FileWriter(FILE_NAME);
+            int idx = 1;
+            for (Task task : tasks) {
+                fw.write(String.valueOf(idx) + "." + task.toString() + System.lineSeparator());
+                idx++;
+            }
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Unable to save tasks: "+ e.getMessage());
+        }
+    }
+
+    private static void loadTasks(ArrayList<Task> tasks) {
+        try {
+            File file = new File(FILE_NAME);
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+                return;
+            }
+
+            Scanner scan = new Scanner(file);
+
+            while (scan.hasNextLine()) {
+                String task = scan.nextLine();
+                String taskType = task.substring(3,4);
+
+                if (taskType.equals("T")) {
+                    boolean isDone = task.substring(6,7).equals("X") ? true : false;
+                    String desc = task.substring(9);
+
+                    if (isDone) {
+                        tasks.add(new ToDo(desc));
+                        tasks.get(tasks.size() - 1).markAsDone();
+                    } else {
+                        tasks.add(new ToDo(desc));
+                    }
+                } else if (taskType.equals("D")) {
+                    boolean isDone = task.substring(6,7).equals("X") ? true : false;
+                    String body = task.substring(9);
+                    String[] desc = body.split("\\(");
+                    String by = desc[1].replace(")", "").replace("by: ", "");
+
+                    if (isDone) {
+                        tasks.add(new Deadline(desc[0].trim(), by));
+                        tasks.get(tasks.size() - 1).markAsDone();
+                    } else {
+                        tasks.add(new Deadline(desc[0].trim(), by));
+                    }
+                } else if (taskType.equals("E")) {
+                    boolean isDone = task.substring(6,7).equals("X") ? true : false;
+                    String body = task.substring(9);
+                    String[] desc = body.split("\\(");
+                    String[] dateRange = desc[1].split(" to: ");
+                    String from = dateRange[0].replace("from: ", "");
+                    String to = dateRange[1].replace(")", "");
+
+                    if (isDone) {
+                        tasks.add(new Event(desc[0].trim(), from, to));
+                        tasks.get(tasks.size() - 1).markAsDone();
+                    } else {
+                        tasks.add(new Event(desc[0].trim(), from, to));
+                    }
+                } else {
+                    boolean isDone = task.substring(3,4).equals("X") ? true : false;
+                    String[] desc = task.split("\\]");
+
+                    if (isDone) {
+                        tasks.add(new Task(desc[1].trim()));
+                        tasks.get(tasks.size() - 1).markAsDone();
+                    } else {
+                        tasks.add(new Task(desc[1].trim()));
+                    }
+                }
+            }
+            scan.close();
+        } catch (IOException e) {
+            System.out.println("Unable to load tasks: " + e.getMessage());
+        }
+    }
+
 }
