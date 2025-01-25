@@ -1,8 +1,10 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Represents main class for Duet chatbot application.
@@ -49,7 +51,7 @@ public class Duet {
                 messages.get(idx).markAsDone();;
                 System.out.println("Nice! I've marked this task as done:");
                 System.out.println("  [" + messages.get(idx).getStatusIcon() + "] " 
-                    + messages.get(idx).getDescription());
+                        + messages.get(idx).getDescription());
                 saveTasks(messages);
             } else if (command[0].equals("unmark")) {
                 int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
@@ -61,7 +63,7 @@ public class Duet {
                 messages.get(idx).unmarkAsDone();
                 System.out.println("OK, I've marked this task as not done yet:");
                 System.out.println("  [" + messages.get(idx).getStatusIcon() + "] " 
-                    + messages.get(idx).getDescription());
+                        + messages.get(idx).getDescription());
                 saveTasks(messages);
             } else if (command[0].equals("deadline")) {
                 if (message.trim().equals("deadline")) {
@@ -93,7 +95,7 @@ public class Duet {
                 }
 
                 String date = "";
-                String byWhen = dates[1];
+                String byWhen = dates[1].trim();
                 String[] dueDate = byWhen.split(" ");
 
                 for (int i = 1; i < dueDate.length; i++) {
@@ -103,8 +105,12 @@ public class Duet {
 
                     date += dueDate[i];
                 }
-            
-                messages.add(new Deadline(desc, date));
+                DateTimeFormatter formatterIn = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                DateTimeFormatter formatterOut = DateTimeFormatter.ofPattern("MMM d yyyy");
+                LocalDate newTime = LocalDate.parse(date, formatterIn);
+                String formattedDate = newTime.format(formatterOut);
+
+                messages.add(new Deadline(desc, formattedDate));
                 Task currentTask = messages.get(messages.size() - 1); 
                 System.out.println("Got it. I've added this task:");
                 System.out.println("  " + currentTask.toString());
@@ -169,7 +175,14 @@ public class Duet {
                     toDate += toArray[k];
                 }
 
-                messages.add(new Event(desc, fromDate, toDate));
+                DateTimeFormatter formatterIn = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                DateTimeFormatter formatterOut = DateTimeFormatter.ofPattern("MMM d yyyy");
+                LocalDate newTime = LocalDate.parse(fromDate, formatterIn);
+                String newFromDate = newTime.format(formatterOut);
+                LocalDate secondNewTime = LocalDate.parse(toDate, formatterIn);
+                String newToDate = secondNewTime.format(formatterOut);
+
+                messages.add(new Event(desc, newFromDate, newToDate));
                 Task currentTask = messages.get(messages.size() - 1); 
                 System.out.println("Got it. I've added this task:");
                 System.out.println("  " + currentTask.toString());
