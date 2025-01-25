@@ -1,3 +1,5 @@
+package duet.task;
+
 /**
  * The Task class represents a task added by users through Duet chatbot.
  * It encapsulates description and completion status of task.

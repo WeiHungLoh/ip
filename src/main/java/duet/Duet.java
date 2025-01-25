@@ -1,4 +1,11 @@
+package duet;
 import java.util.ArrayList;
+
+import duet.parser.Parser;
+import duet.storage.Storage;
+import duet.task.*;
+import duet.task.TaskList;
+import duet.ui.Ui;
 
 /**
  * Represents main class for Duet chatbot application.

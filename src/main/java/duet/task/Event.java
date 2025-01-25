@@ -1,3 +1,5 @@
+package duet.task;
+
 /**
  * Encapsulates an event added by user through Duet chatbot.
  * 

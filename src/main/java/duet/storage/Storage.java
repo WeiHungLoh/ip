@@ -1,8 +1,15 @@
+package duet.storage;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import duet.task.Deadline;
+import duet.task.Event;
+import duet.task.Task;
+import duet.task.ToDo;
 
 /**
  * Represents a class that deals with loading 

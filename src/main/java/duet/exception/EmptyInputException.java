@@ -1,18 +1,19 @@
+package duet.exception;
 /**
- * Represents an exception that is thrown when an invalid input is provided
+ * Represents an exception that is thrown when no input is provided.
  *
  * @author: Loh Wei Hung
  */
-public class InvalidInputException extends DuetException {
+public class EmptyInputException extends DuetException {
     /** Description of error message */
     protected String description;
 
     /**
-     * Creates an InvalidInputException with error message.
+     * Creates an EmptyInputException with error message.
      * 
      * @param description A specified error message.
      */
-    public InvalidInputException(String description) {
+    public EmptyInputException(String description) {
         super(description);
     }
 

@@ -1,3 +1,4 @@
+package duet.task;
 /**
  * Encapsulates a ToDo task added by user through Duet chatbot.
  * 

@@ -1,3 +1,5 @@
+package duet.ui;
+
 import java.util.Scanner;
 
 /**

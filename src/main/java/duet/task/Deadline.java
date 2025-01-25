@@ -1,3 +1,5 @@
+package duet.task;
+
 /**
  * Encapsulates a deadline added by user through Duet chatbot.
  * 
