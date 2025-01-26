@@ -1,4 +1,5 @@
 package duet.exception;
+
 /**
  * Represents an exception specifically for Duet chatbot.
  * This exception handles errors that occur when a user gives an invalid command.  

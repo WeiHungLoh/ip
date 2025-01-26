@@ -1,11 +1,12 @@
 package duet;
+
 import java.util.ArrayList;
 
 import duet.exception.EmptyInputException;
 import duet.exception.InvalidInputException;
 import duet.parser.Parser;
 import duet.storage.Storage;
-import duet.task.*;
+import duet.task.Task;
 import duet.task.TaskList;
 import duet.ui.Ui;
 
