@@ -33,10 +33,12 @@ public class Storage {
         try {
             FileWriter fw = new FileWriter(filePath);
             int idx = 1;
+
             for (Task task : tasks) {
                 fw.write(String.valueOf(idx) + "." + task.toString() + System.lineSeparator());
                 idx++;
             }
+
             fw.close();
         } catch (IOException e) {
             System.out.println("Unable to save tasks: "+ e.getMessage());
@@ -114,6 +116,7 @@ public class Storage {
                     }
                 }
             }
+            
             scan.close();
         } catch (IOException e) {
             System.out.println("Unable to load tasks: " + e.getMessage());
