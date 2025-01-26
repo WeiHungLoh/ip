@@ -37,8 +37,8 @@ public class Duet {
 
     /**
      * Runs Duet Chatbot so that users can add, remove or mark tasks as done.
-     * @throws InvalidInputException 
-     * @throws EmptyInputException 
+     * @throws InvalidInputException If Deadline or Event class does not contain /by or /from respectively.
+     * @throws EmptyInputException If nothing is entered after running the bot.
      */
     public void run() throws EmptyInputException, InvalidInputException {
         ui.showWelcomeMessage();

@@ -47,8 +47,8 @@ public class Storage {
      * Returns ArrayList of Task in the previous interaction with Duet chatbot.
      * 
      * @return An ArrayList of Task.
-     * @throws InvalidInputException 
-     * @throws EmptyInputException 
+     * @throws InvalidInputException If Event or Deadline task does not have /by or /from respectively.
+     * @throws EmptyInputException If user enters without typing a command.
      */
     public ArrayList<Task> load() throws EmptyInputException, InvalidInputException {
         ArrayList<Task> tasks = new ArrayList<>();

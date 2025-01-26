@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 /**
  * Represents a class to maintain task list.
- * It has add/delete tasks in the list.
+ * It contains most methods found in the Task class.
  * 
  * @author: Loh Wei Hung
  */

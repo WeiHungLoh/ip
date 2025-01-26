@@ -27,8 +27,8 @@ public class Parser {
      * @param messages Tasks in TaskList.
      * @param ui Ui to read user input. 
      * @param storage Storage to load and save data.
-     * @throws InvalidInputException 
-     * @throws EmptyInputException 
+     * @throws InvalidInputException If Deadline or Event class does not have /by or /from when parsing user input.
+     * @throws EmptyInputException If user enters without typing a command.
      */
     public static void parseTask(TaskList messages, Ui ui, Storage storage) 
             throws EmptyInputException, InvalidInputException {
