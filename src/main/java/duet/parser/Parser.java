@@ -91,14 +91,13 @@ public class Parser {
                     if (i > 1) {
                         date += " ";
                     } 
-
                     date += dueDate[i];
                 }
+
                 DateTimeFormatter formatterIn = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 DateTimeFormatter formatterOut = DateTimeFormatter.ofPattern("MMM d yyyy");
                 LocalDate newTime = LocalDate.parse(date, formatterIn);
                 String formattedDate = newTime.format(formatterOut);
-
                 messages.add(new Deadline(desc, formattedDate));
                 Task currentTask = messages.get(messages.size() - 1); 
                 System.out.println("Got it. I've added this task:");
@@ -109,6 +108,7 @@ public class Parser {
                 } else {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
+
                 storage.save(messages.getTasks());
             } else if (command[0].equals("event")) {
                 String desc = "";
@@ -118,7 +118,6 @@ public class Parser {
                     if (i > 1) {
                         desc += " ";
                     }
-
                     desc += descArray[i];
                 }
 
@@ -130,7 +129,6 @@ public class Parser {
                     if (j > 1) {
                         fromDate += " ";
                     }
-
                     fromDate += fromArray[j];
                 }
 
@@ -142,7 +140,6 @@ public class Parser {
                     if (k > 1) {
                         toDate += " ";
                     }
-
                     toDate += toArray[k];
                 }
 
@@ -152,7 +149,6 @@ public class Parser {
                 String newFromDate = newTime.format(formatterOut);
                 LocalDate secondNewTime = LocalDate.parse(toDate, formatterIn);
                 String newToDate = secondNewTime.format(formatterOut);
-
                 messages.add(new Event(desc, newFromDate, newToDate));
                 Task currentTask = messages.get(messages.size() - 1); 
                 System.out.println("Got it. I've added this task:");
@@ -163,6 +159,7 @@ public class Parser {
                 } else {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
+
                 storage.save(messages.getTasks());
             } else if (command[0].equals("todo")) {
                 String desc = "";
@@ -171,7 +168,6 @@ public class Parser {
                     if (i > 1) {
                         desc += " ";
                     }
-                    
                     desc += command[i];
                 }
 
@@ -185,6 +181,7 @@ public class Parser {
                 } else {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
+
                 storage.save(messages.getTasks());
             } else if (command[0].equals("delete")) {
                 if (message.trim().equals("delete")) {
@@ -216,6 +213,7 @@ public class Parser {
                 } else {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
+                
                 storage.save(messages.getTasks());
             } else {
                 messages.add(new Task(message));

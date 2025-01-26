@@ -1,4 +1,5 @@
 package duet.exception;
+
 /**
  * Represents an exception that is thrown when no input is provided.
  *
