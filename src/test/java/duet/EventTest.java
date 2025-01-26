@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import duet.exception.EmptyInputException;
 import duet.exception.InvalidInputException;
-import duet.task.Deadline;
 import duet.task.Event;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
