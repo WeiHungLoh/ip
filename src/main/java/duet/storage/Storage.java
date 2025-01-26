@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import duet.exception.EmptyInputException;
+import duet.exception.InvalidInputException;
 import duet.task.Deadline;
 import duet.task.Event;
 import duet.task.Task;
@@ -45,8 +47,10 @@ public class Storage {
      * Returns ArrayList of Task in the previous interaction with Duet chatbot.
      * 
      * @return An ArrayList of Task.
+     * @throws InvalidInputException 
+     * @throws EmptyInputException 
      */
-    public ArrayList<Task> load() {
+    public ArrayList<Task> load() throws EmptyInputException, InvalidInputException {
         ArrayList<Task> tasks = new ArrayList<>();
 
         try {

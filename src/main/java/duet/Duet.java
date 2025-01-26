@@ -1,6 +1,8 @@
 package duet;
 import java.util.ArrayList;
 
+import duet.exception.EmptyInputException;
+import duet.exception.InvalidInputException;
 import duet.parser.Parser;
 import duet.storage.Storage;
 import duet.task.*;
@@ -35,13 +37,15 @@ public class Duet {
 
     /**
      * Runs Duet Chatbot so that users can add, remove or mark tasks as done.
+     * @throws InvalidInputException 
+     * @throws EmptyInputException 
      */
-    public void run() {
+    public void run() throws EmptyInputException, InvalidInputException {
         ui.showWelcomeMessage();
         Parser.parseTask(tasks, ui, storage);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EmptyInputException, InvalidInputException {
         new Duet("data/duet.txt").run();
     }
 }

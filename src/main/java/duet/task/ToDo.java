@@ -1,12 +1,19 @@
 package duet.task;
+
+import duet.exception.EmptyInputException;
+
 /**
  * Encapsulates a ToDo task added by user through Duet chatbot.
  * 
  * @author: Loh Wei Hung
  */
 public class ToDo extends Task{
-    public ToDo(String description) {
+    public ToDo(String description) throws EmptyInputException {
         super(description);
+
+        if (description == "") {
+            throw new EmptyInputException(description);
+        }
     }
 
     /**

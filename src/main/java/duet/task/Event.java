@@ -1,5 +1,8 @@
 package duet.task;
 
+import duet.exception.EmptyInputException;
+import duet.exception.InvalidInputException;
+
 /**
  * Encapsulates an event added by user through Duet chatbot.
  * 
@@ -9,8 +12,17 @@ public class Event extends Task {
     protected String from;
     protected String to;
 
-    public Event(String description, String from, String to) {
+    public Event(String description, String from, String to) throws EmptyInputException, InvalidInputException {
         super(description);
+
+        if (description == "") {
+            throw new EmptyInputException("The description cannot be empty.");
+        }
+
+        if (from == "" || to == "") {
+            throw new InvalidInputException("Invalid event command.");
+        }
+
         this.from = from;
         this.to = to;
     }

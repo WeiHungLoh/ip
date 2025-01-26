@@ -2,7 +2,6 @@ package duet.parser;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 import duet.exception.EmptyInputException;
 import duet.exception.InvalidInputException;
@@ -28,8 +27,11 @@ public class Parser {
      * @param messages Tasks in TaskList.
      * @param ui Ui to read user input. 
      * @param storage Storage to load and save data.
+     * @throws InvalidInputException 
+     * @throws EmptyInputException 
      */
-    public static void parseTask(TaskList messages, Ui ui, Storage storage) {
+    public static void parseTask(TaskList messages, Ui ui, Storage storage) 
+            throws EmptyInputException, InvalidInputException {
         while (true) {
             String message = ui.nextLine();
             String[] command = message.split(" ");
@@ -71,24 +73,6 @@ public class Parser {
                         + messages.get(idx).getDescription());
                 storage.save(messages.getTasks());
             } else if (command[0].equals("deadline")) {
-                if (message.trim().equals("deadline")) {
-                    try {
-                        throw new EmptyInputException("The description for deadline cannot be empty.");
-                    } catch (EmptyInputException e) {
-                        System.out.println(e.getMessage());
-                        continue;
-                    }
-                }
-
-                if (dates.length == 1) {
-                    try {
-                        throw new InvalidInputException("Invalid deadline command.");
-                    } catch (InvalidInputException e) {
-                        System.out.println(e.getMessage());
-                        continue;
-                    }
-                }
-
                 String desc = "";
                 String[] descArray = dates[0].split(" ");
                 
@@ -127,24 +111,6 @@ public class Parser {
                 }
                 storage.save(messages.getTasks());
             } else if (command[0].equals("event")) {
-                if (message.trim().equals("event")) {
-                    try {
-                        throw new EmptyInputException("The description for event cannot be empty.");
-                    } catch (EmptyInputException e) {
-                        System.out.println(e.getMessage());
-                        continue;
-                    }
-                }
-
-                if (dates.length == 1) {
-                    try {
-                        throw new InvalidInputException("Invalid event command.");
-                    } catch (InvalidInputException e) {
-                        System.out.println(e.getMessage());
-                        continue;
-                    }
-                }
-
                 String desc = "";
                 String[] descArray = dates[0].split(" ");
 
@@ -199,15 +165,6 @@ public class Parser {
                 }
                 storage.save(messages.getTasks());
             } else if (command[0].equals("todo")) {
-                if (message.trim().equals("todo")) {
-                    try {
-                        throw new EmptyInputException("The description for todo cannot be empty.");
-                    } catch (EmptyInputException e) {
-                        System.out.println(e.getMessage());
-                        continue;
-                    }
-                }
-
                 String desc = "";
 
                 for (int i = 1; i < command.length; i++) {
@@ -229,13 +186,6 @@ public class Parser {
                     System.out.println("Now you have " + messages.size() + " task in the list.");
                 }
                 storage.save(messages.getTasks());
-            } else if (message.equals("")) {
-                try {
-                    throw new EmptyInputException("The description cannot be empty.");
-                } catch (EmptyInputException e) {
-                    System.out.println(e.getMessage());
-                    continue;
-                }
             } else if (command[0].equals("delete")) {
                 if (message.trim().equals("delete")) {
                     try {
