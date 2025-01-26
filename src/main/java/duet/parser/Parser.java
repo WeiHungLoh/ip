@@ -2,6 +2,7 @@ package duet.parser;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import duet.exception.EmptyInputException;
 import duet.exception.InvalidInputException;
@@ -47,6 +48,29 @@ public class Parser {
                     String index = String.valueOf(i + 1); // increment index since it starts from 1
                     Task taskName = messages.get(i);
                     System.out.println(index + "." + taskName.toString());
+                }
+            } else if (command[0].equals("find")) {
+                String keyword = command[1];
+                ArrayList<Task> newTasks = new ArrayList<>();
+
+                if (command.length < 2) {
+                    throw new EmptyInputException("The keyword cannot be empty");
+                }
+
+                for (Task task : messages.getTasks()) {
+                    if (task.toString().contains(keyword)) {
+                        newTasks.add(task);
+                    }
+                }
+
+                if (newTasks.size() > 0) {
+                    System.out.println("Here are the matching tasks in your list:");
+
+                    for (Task task : newTasks) {
+                        System.out.println(task.toString());
+                    }
+                } else {
+                    System.out.println("Task is not found.");
                 }
             } else if (command[0].equals("mark")) {
                 int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
