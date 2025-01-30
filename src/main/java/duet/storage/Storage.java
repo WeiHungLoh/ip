@@ -14,9 +14,9 @@ import duet.task.Task;
 import duet.task.ToDo;
 
 /**
- * Represents a class that deals with loading 
+ * Represents a class that deals with loading
  * and saving tasks from a file.
- * 
+ *
  * @author: Loh Wei Hung
  */
 public class Storage {
@@ -41,13 +41,13 @@ public class Storage {
 
             fw.close();
         } catch (IOException e) {
-            System.out.println("Unable to save tasks: "+ e.getMessage());
+            System.out.println("Unable to save tasks: " + e.getMessage());
         }
     }
-    
+
     /**
      * Returns ArrayList of Task in the previous interaction with Duet chatbot.
-     * 
+     *
      * @return An ArrayList of Task.
      * @throws InvalidInputException If Event or Deadline task does not have /by or /from respectively.
      * @throws EmptyInputException If user enters without typing a command.
@@ -66,10 +66,10 @@ public class Storage {
 
             while (scan.hasNextLine()) {
                 String task = scan.nextLine();
-                String taskType = task.substring(3,4);
+                String taskType = task.substring(3, 4);
 
                 if (taskType.equals("T")) {
-                    boolean isDone = task.substring(6,7).equals("X") ? true : false;
+                    boolean isDone = task.substring(6, 7).equals("X") ? true : false;
                     String desc = task.substring(9);
 
                     if (isDone) {
@@ -79,7 +79,7 @@ public class Storage {
                         tasks.add(new ToDo(desc));
                     }
                 } else if (taskType.equals("D")) {
-                    boolean isDone = task.substring(6,7).equals("X") ? true : false;
+                    boolean isDone = task.substring(6, 7).equals("X") ? true : false;
                     String body = task.substring(9);
                     String[] desc = body.split("\\(");
                     String by = desc[1].replace(")", "").replace("by: ", "");
@@ -91,7 +91,7 @@ public class Storage {
                         tasks.add(new Deadline(desc[0].trim(), by));
                     }
                 } else if (taskType.equals("E")) {
-                    boolean isDone = task.substring(6,7).equals("X") ? true : false;
+                    boolean isDone = task.substring(6, 7).equals("X") ? true : false;
                     String body = task.substring(9);
                     String[] desc = body.split("\\(");
                     String[] dateRange = desc[1].split(" to: ");
@@ -105,7 +105,7 @@ public class Storage {
                         tasks.add(new Event(desc[0].trim(), from, to));
                     }
                 } else {
-                    boolean isDone = task.substring(3,4).equals("X") ? true : false;
+                    boolean isDone = task.substring(3, 4).equals("X") ? true : false;
                     String[] desc = task.split("\\]");
 
                     if (isDone) {
@@ -116,7 +116,7 @@ public class Storage {
                     }
                 }
             }
-            
+
             scan.close();
         } catch (IOException e) {
             System.out.println("Unable to load tasks: " + e.getMessage());

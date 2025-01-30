@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * Represents a class that deals with user interactions.
  * It shows welcome and good bye messages as well as error message.
- * 
+ *
  * @author: Loh Wei Hung
  */
 public class Ui {
@@ -36,7 +36,7 @@ public class Ui {
 
     /**
      * Returns a line of user input.
-     * 
+     *
      * @return A string consisting of user input.
      */
     public String nextLine() {

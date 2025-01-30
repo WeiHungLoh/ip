@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Represents a class to maintain task list.
  * It contains most methods found in the Task class.
- * 
+ *
  * @author: Loh Wei Hung
  */
 public class TaskList {

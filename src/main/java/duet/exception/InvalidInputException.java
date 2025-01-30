@@ -11,7 +11,7 @@ public class InvalidInputException extends DuetException {
 
     /**
      * Creates an InvalidInputException with error message.
-     * 
+     *
      * @param description A specified error message.
      */
     public InvalidInputException(String description) {
@@ -20,7 +20,7 @@ public class InvalidInputException extends DuetException {
 
     /**
      * Returns the error message when no input is provided.
-     * 
+     *
      * @return A string consists of the specific error message.
      */
     @Override

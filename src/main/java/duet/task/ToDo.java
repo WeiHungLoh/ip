@@ -4,10 +4,16 @@ import duet.exception.EmptyInputException;
 
 /**
  * Encapsulates a ToDo task added by user through Duet chatbot.
- * 
+ *
  * @author: Loh Wei Hung
  */
-public class ToDo extends Task{
+public class ToDo extends Task {
+    /**
+     * Creates a todo task with a description.
+     *
+     * @param description The description of task.
+     * @throws EmptyInputException If description is empty.
+     */
     public ToDo(String description) throws EmptyInputException {
         super(description);
 
@@ -18,7 +24,7 @@ public class ToDo extends Task{
 
     /**
      * Return the string representation of a Todo task.
-     * 
+     *
      * @return A string consists of ToDo description.
      */
     @Override

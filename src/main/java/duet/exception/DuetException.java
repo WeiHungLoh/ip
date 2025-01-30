@@ -2,8 +2,8 @@ package duet.exception;
 
 /**
  * Represents an exception specifically for Duet chatbot.
- * This exception handles errors that occur when a user gives an invalid command.  
- * 
+ * This exception handles errors that occur when a user gives an invalid command.
+ *
  * @author: Loh Wei Hung
  */
 public class DuetException extends Exception {
@@ -12,7 +12,7 @@ public class DuetException extends Exception {
 
     /**
      * Creates a new DukeException with a particular error description.
-     * 
+     *
      * @param description The error description for cause of error.
      */
     public DuetException(String description) {
@@ -21,7 +21,7 @@ public class DuetException extends Exception {
 
     /**
      * Returns a string representation of cause of error.
-     * 
+     *
      * @return A string consists of error message.
      */
     @Override
