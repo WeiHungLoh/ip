@@ -1,13 +1,13 @@
 package duet;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.Test;
 
 import duet.exception.EmptyInputException;
 import duet.exception.InvalidInputException;
 import duet.task.Deadline;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class DeadlineTest {
     @Test
@@ -22,7 +22,7 @@ public class DeadlineTest {
 
     @Test
     public void createNewDeadline_success() throws EmptyInputException, InvalidInputException {
-        assertEquals("[D][ ] do homework (by: 2020-02-02)", 
+        assertEquals("[D][ ] do homework (by: 2020-02-02)",
                 new Deadline("do homework", "2020-02-02").toString());
     }
 }

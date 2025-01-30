@@ -11,7 +11,7 @@ public class EmptyInputException extends DuetException {
 
     /**
      * Creates an EmptyInputException with error message.
-     * 
+     *
      * @param description A specified error message.
      */
     public EmptyInputException(String description) {
@@ -20,7 +20,7 @@ public class EmptyInputException extends DuetException {
 
     /**
      * Returns the error message when no input is provided.
-     * 
+     *
      * @return A string consists of the specific error message.
      */
     @Override

@@ -5,13 +5,19 @@ import duet.exception.EmptyInputException;
 /**
  * The Task class represents a task added by users through Duet chatbot.
  * It encapsulates description and completion status of task.
- * 
+ *
  * @author: Loh Wei Hung
  */
 public class Task {
     protected String description;
     protected boolean isDone;
 
+    /**
+     * Creates a new Task with a description.
+     *
+     * @param description The description of task.
+     * @throws EmptyInputException If description is empty.
+     */
     public Task(String description) throws EmptyInputException {
         if (description == "") {
             throw new EmptyInputException("The description cannot be empty");
@@ -23,7 +29,7 @@ public class Task {
 
     /**
      * Returns completion status of task in the form of X or empty space.
-     * 
+     *
      * @return Status of task completion.
      */
     public String getStatusIcon() {
@@ -46,7 +52,7 @@ public class Task {
 
     /**
      * Returns description of task.
-     * 
+     *
      * @return Task description.
      */
     public String getDescription() {
@@ -55,7 +61,7 @@ public class Task {
 
     /**
      * Return the string description of task.
-     * 
+     *
      * @return A string consists of description and completion status of task.
      */
     @Override
