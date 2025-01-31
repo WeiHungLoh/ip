@@ -18,6 +18,11 @@ repositories {
 dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
+    String javaFxVersion = '17.0.7'
+    implementation "org.openjfx:javafx-base:$javaFxVersion"
+    implementation "org.openjfx:javafx-controls:$javaFxVersion"
+    implementation "org.openjfx:javafx-fxml:$javaFxVersion"
+    implementation "org.openjfx:javafx-graphics:$javaFxVersion"
 }
 
 test {
@@ -35,7 +40,7 @@ test {
 }
 
 application {
-    mainClass.set("duet.Duet")
+    mainClass.set("duet.Launcher")
 }
 
 shadowJar {
@@ -43,6 +48,6 @@ shadowJar {
     archiveClassifier = null
 }
 
-run{
+run {
     standardInput = System.in
 }
