@@ -31,7 +31,226 @@ public class Parser {
      * @throws InvalidInputException If Deadline or Event class does not have /by or /from when parsing user input.
      * @throws EmptyInputException If user enters without typing a command.
      */
-    public static void parseTask(TaskList messages, Ui ui, Storage storage)
+    public static String parseTaskGUI(String message, TaskList messages, Ui ui, Storage storage)
+            throws EmptyInputException, InvalidInputException {
+        String[] command = message.split(" ");
+        String[] dates = message.split("/");
+
+        if (message.equals("bye")) {
+            return "Bye. Hope to see you again soon!";
+        } else if (message.equals("list")) {
+            String desc = "";
+            desc += "Here are the tasks in your list:\n";
+
+            for (int i = 0; i < messages.size(); i++) {
+                String index = String.valueOf(i + 1); // increment index since it starts from 1
+                Task taskName = messages.get(i);
+
+                desc += index + "." + taskName.toString() + "\n";
+            }
+            return desc;
+        } else if (command[0].equals("find")) {
+            String keyword = command[1];
+            ArrayList<Task> newTasks = new ArrayList<>();
+
+            if (command.length < 2) {
+                throw new EmptyInputException("The keyword cannot be empty");
+            }
+
+            for (Task task : messages.getTasks()) {
+                if (task.toString().contains(keyword)) {
+                    newTasks.add(task);
+                }
+            }
+
+            String desc = "";
+
+            if (newTasks.size() > 0) {
+                desc += "Here are the matching tasks in your list:\n";
+
+                for (Task task : newTasks) {
+                    desc += task.toString() + "\n";
+                }
+                return desc;
+            } else {
+                return "Task is not found.";
+            }
+        } else if (command[0].equals("mark")) {
+            int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
+
+            if (Integer.parseInt(command[1]) > messages.size()) {
+                throw new IndexOutOfBoundsException();
+            }
+
+            storage.save(messages.getTasks());
+            messages.get(idx).markAsDone();
+            return "Nice! I've marked this task as done:\n" + "  [" + messages.get(idx).getStatusIcon() + "] "
+                    + messages.get(idx).getDescription();
+        } else if (command[0].equals("unmark")) {
+            int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
+
+            if (Integer.parseInt(command[1]) > messages.size()) {
+                throw new IndexOutOfBoundsException();
+            }
+
+            messages.get(idx).unmarkAsDone();
+            storage.save(messages.getTasks());
+            return "OK, I've marked this task as not done yet:\n" + " [" + messages.get(idx).getStatusIcon()
+                    + "] " + messages.get(idx).getDescription();
+        } else if (command[0].equals("deadline")) {
+            String desc = "";
+            String[] descArray = dates[0].split(" ");
+
+            for (int j = 1; j < descArray.length; j++) {
+                if (j > 1) {
+                    desc += " ";
+                }
+                desc += descArray[j];
+            }
+
+            String date = "";
+            String byWhen = dates[1].trim();
+            String[] dueDate = byWhen.split(" ");
+
+            for (int i = 1; i < dueDate.length; i++) {
+                if (i > 1) {
+                    date += " ";
+                }
+                date += dueDate[i];
+            }
+
+            DateTimeFormatter formatterIn = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter formatterOut = DateTimeFormatter.ofPattern("MMM d yyyy");
+            LocalDate newTime = LocalDate.parse(date, formatterIn);
+            String formattedDate = newTime.format(formatterOut);
+            messages.add(new Deadline(desc, formattedDate));
+            Task currentTask = messages.get(messages.size() - 1);
+
+            String otherDesc = "";
+            if (messages.size() > 1) {
+                otherDesc += "Now you have " + messages.size() + " tasks in the list.";
+            } else {
+                otherDesc += "Now you have " + messages.size() + " task in the list.";
+            }
+
+            storage.save(messages.getTasks());
+
+            return "Got it. I've added this task:\n " + currentTask.toString()
+                    + "\n" + otherDesc;
+        } else if (command[0].equals("event")) {
+            String desc = "";
+            String[] descArray = dates[0].split(" ");
+
+            for (int i = 1; i < descArray.length; i++) {
+                if (i > 1) {
+                    desc += " ";
+                }
+                desc += descArray[i];
+            }
+
+            String fromDate = "";
+            String from = dates[1];
+            String[] fromArray = from.split(" ");
+
+            for (int j = 1; j < fromArray.length; j++) {
+                if (j > 1) {
+                    fromDate += " ";
+                }
+                fromDate += fromArray[j];
+            }
+
+            String toDate = "";
+            String to = dates[2];
+            String[] toArray = to.split(" ");
+
+            for (int k = 1; k < toArray.length; k++) {
+                if (k > 1) {
+                    toDate += " ";
+                }
+                toDate += toArray[k];
+            }
+
+            DateTimeFormatter formatterIn = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter formatterOut = DateTimeFormatter.ofPattern("MMM d yyyy");
+            LocalDate newTime = LocalDate.parse(fromDate, formatterIn);
+            String newFromDate = newTime.format(formatterOut);
+            LocalDate secondNewTime = LocalDate.parse(toDate, formatterIn);
+            String newToDate = secondNewTime.format(formatterOut);
+            messages.add(new Event(desc, newFromDate, newToDate));
+            Task currentTask = messages.get(messages.size() - 1);
+
+            String otherDesc = "";
+            if (messages.size() > 1) {
+                otherDesc += "Now you have " + messages.size() + " tasks in the list.";
+            } else {
+                otherDesc += "Now you have " + messages.size() + " task in the list.";
+            }
+
+            storage.save(messages.getTasks());
+            return "Got it. I've added this task:\n" + " " + currentTask.toString() + "\n"
+                    + "\n" + otherDesc;
+        } else if (command[0].equals("todo")) {
+            String desc = "";
+
+            for (int i = 1; i < command.length; i++) {
+                if (i > 1) {
+                    desc += " ";
+                }
+                desc += command[i];
+            }
+
+            messages.add(new ToDo(desc));
+            Task currentTask = messages.get(messages.size() - 1);
+
+            String otherDesc = "";
+            if (messages.size() > 1) {
+                otherDesc += "Now you have " + messages.size() + " tasks in the list.";
+            } else {
+                otherDesc += "Now you have " + messages.size() + " task in the list.";
+            }
+
+            storage.save(messages.getTasks());
+            return "Got it. I've added this task:\n" + " " + currentTask.toString()
+                    + "\n" + otherDesc;
+        } else if (command[0].equals("delete")) {
+            if (message.trim().equals("delete")) {
+                try {
+                    throw new EmptyInputException("The description for delete cannot be empty.");
+                } catch (EmptyInputException e) {
+                    return e.getMessage();
+                }
+            }
+
+            if (Integer.parseInt(command[1]) > messages.size() || Integer.parseInt(command[1]) < 1) {
+                try {
+                    throw new InvalidInputException("The task that you want to delete does not exist.");
+                } catch (InvalidInputException e) {
+                    return e.getMessage();
+                }
+            }
+
+            int idx = Integer.parseInt(command[1]) - 1; // decrements index since ArrayList is zero-indexed
+            Task deletedTask = messages.get(idx);
+            messages.remove(idx);
+
+            String otherDesc = "";
+            if (messages.size() > 1) {
+                otherDesc += "Now you have " + messages.size() + " tasks in the list.";
+            } else {
+                otherDesc += "Now you have " + messages.size() + " task in the list.";
+            }
+
+            storage.save(messages.getTasks());
+            return "Noted. I've removed this task:\n" + " " + deletedTask.toString()
+                    + "\n" + otherDesc;
+        } else {
+            messages.add(new Task(message));
+            storage.save(messages.getTasks());
+            return "added: " + message;
+        }
+    }
+
+    public static void parseTaskCLI(TaskList messages, Ui ui, Storage storage)
             throws EmptyInputException, InvalidInputException {
         while (true) {
             String message = ui.nextLine();
