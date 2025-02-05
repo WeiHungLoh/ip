@@ -28,9 +28,16 @@ public class MainWindow extends AnchorPane {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
 
+    /**
+     * Initialises the dialog boxes.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        String response = "Hello! I'm Duet\nWhat can I do for you?";
+        dialogContainer.getChildren().addAll(
+            DialogBox.getDukeDialog(response, dukeImage)
+        );
     }
 
     /** Injects the Duke instance */
@@ -55,7 +62,11 @@ public class MainWindow extends AnchorPane {
         );
         userInput.clear();
 
+        String byeMessage = "Bye. Hope to see you again soon!";
         if (input.equals("bye")) {
+            dialogContainer.getChildren().addAll(
+                DialogBox.getDukeDialog(byeMessage, dukeImage)
+            );
             closeWindow();
         }
     }

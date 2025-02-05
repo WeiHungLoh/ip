@@ -22,7 +22,7 @@ import duet.ui.Ui;
  */
 public class Parser {
     /**
-     * Reads user input and perform the corresponding action
+     * Reads user input and perform the corresponding action via Duet chatbot.
      * like adding, removing or marking tasks as done.
      *
      * @param messages Tasks in TaskList.
@@ -31,7 +31,7 @@ public class Parser {
      * @throws InvalidInputException If Deadline or Event class does not have /by or /from when parsing user input.
      * @throws EmptyInputException If user enters without typing a command.
      */
-    public static String parseTaskGUI(String message, TaskList messages, Ui ui, Storage storage)
+    public static String parseTaskGui(String message, TaskList messages, Ui ui, Storage storage)
             throws EmptyInputException, InvalidInputException {
         String[] command = message.split(" ");
         String[] dates = message.split("/");
@@ -250,7 +250,17 @@ public class Parser {
         }
     }
 
-    public static void parseTaskCLI(TaskList messages, Ui ui, Storage storage)
+    /**
+     * Reads user input and perform the corresponding action
+     * like adding, removing or marking tasks as done.
+     *
+     * @param messages Tasks in TaskList.
+     * @param ui Ui to read user input.
+     * @param storage Storage to load and save data.
+     * @throws InvalidInputException If Deadline or Event class does not have /by or /from when parsing user input.
+     * @throws EmptyInputException If user enters without typing a command.
+     */
+    public static void parseTaskCli(TaskList messages, Ui ui, Storage storage)
             throws EmptyInputException, InvalidInputException {
         while (true) {
             String message = ui.nextLine();

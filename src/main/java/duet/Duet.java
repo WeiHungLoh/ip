@@ -63,7 +63,7 @@ public class Duet {
      */
     public void run() throws EmptyInputException, InvalidInputException {
         ui.showWelcomeMessage();
-        Parser.parseTaskCLI(tasks, ui, storage);
+        Parser.parseTaskCli(tasks, ui, storage);
     }
 
     /**
@@ -75,7 +75,7 @@ public class Duet {
      * @throws InvalidInputException If dates for deadline or event task is omitted.
      */
     public String getResponse(String input) throws EmptyInputException, InvalidInputException {
-        return Parser.parseTaskGUI(input, tasks, ui, storage);
+        return Parser.parseTaskGui(input, tasks, ui, storage);
     }
 
     public static void main(String[] args) throws EmptyInputException, InvalidInputException {
