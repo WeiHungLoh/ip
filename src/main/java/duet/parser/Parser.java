@@ -217,7 +217,7 @@ public class Parser {
 
         Task currentTask = getFormattedDeadlineTask(messages, date, desc);
         String otherDesc = "";
-        updateCurrentTaskMessage(messages, otherDesc);
+        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
         return "Got it. I've added this task:\n " + currentTask.toString()
                 + "\n" + otherDesc;
@@ -275,7 +275,7 @@ public class Parser {
         }
         Task currentTask = getFormattedEventTask(messages, desc, fromDate, toDate);
         String otherDesc = "";
-        updateCurrentTaskMessage(messages, otherDesc);
+        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
         return "Got it. I've added this task:\n" + " " + currentTask.toString() + "\n"
                 + "\n" + otherDesc;
@@ -306,7 +306,7 @@ public class Parser {
         messages.add(new ToDo(desc));
         Task currentTask = messages.get(messages.size() - 1);
         String otherDesc = "";
-        updateCurrentTaskMessage(messages, otherDesc);
+        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
         return "Got it. I've added this task:\n" + " " + currentTask.toString()
                 + "\n" + otherDesc;
@@ -318,11 +318,11 @@ public class Parser {
      * @param messages A TaskList of messages.
      * @param otherDesc A String consists of the number of tasks.
      */
-    public static void updateCurrentTaskMessage(TaskList messages, String otherDesc) {
+    public static String updateCurrentTaskMessage(TaskList messages, String otherDesc) {
         if (messages.size() > 1) {
-            otherDesc += "Now you have " + messages.size() + " tasks in the list.";
+            return "Now you have " + messages.size() + " tasks in the list.";
         } else {
-            otherDesc += "Now you have " + messages.size() + " task in the list.";
+            return "Now you have " + messages.size() + " task in the list.";
         }
     }
 
@@ -348,7 +348,7 @@ public class Parser {
         Task deletedTask = messages.get(idx);
         messages.remove(idx);
         String otherDesc = "";
-        updateCurrentTaskMessage(messages, otherDesc);
+        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
         return "Noted. I've removed this task:\n" + " " + deletedTask.toString()
                 + "\n" + otherDesc;
