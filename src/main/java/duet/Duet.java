@@ -57,16 +57,6 @@ public class Duet {
     }
 
     /**
-     * Runs Duet Chatbot so that users can add, remove or mark tasks as done.
-     * @throws InvalidInputException If Deadline or Event class does not contain /by or /from respectively.
-     * @throws EmptyInputException If nothing is entered after running the bot.
-     */
-    public void run() throws EmptyInputException, InvalidInputException {
-        ui.showWelcomeMessage();
-        Parser.parseTaskCli(tasks, ui, storage);
-    }
-
-    /**
      * Returns response by Duet chatbot.
      *
      * @param input A string consists of user input.
@@ -79,6 +69,6 @@ public class Duet {
     }
 
     public static void main(String[] args) throws EmptyInputException, InvalidInputException {
-        new Duet("data/duet.txt").run();
+        new Duet("data/duet.txt");
     }
 }

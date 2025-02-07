@@ -22,46 +22,6 @@ import duet.ui.Ui;
  */
 public class Parser {
     /**
-     * Reads user input and perform the corresponding action
-     * like adding, removing or marking tasks as done.
-     *
-     * @param messages Tasks in TaskList.
-     * @param ui Ui to read user input.
-     * @param storage Storage to load and save data.
-     * @throws InvalidInputException If Deadline or Event class does not have /by or /from when parsing user input.
-     * @throws EmptyInputException If user enters without typing a command.
-     */
-    public static void parseTaskCli(TaskList messages, Ui ui, Storage storage)
-            throws EmptyInputException, InvalidInputException {
-        while (true) {
-            String message = ui.nextLine();
-            String[] command = message.split(" ");
-            String[] dates = message.split("/");
-
-            if (message.equals("bye")) {
-                System.out.println(getByeMessage());
-                break;
-            } else if (message.equals("list")) {
-                System.out.println(getTaskList(messages));
-            } else if (command[0].equals("find")) {
-                System.out.println(getFindResults(command, messages));
-            } else if (command[0].equals("mark")) {
-                System.out.println(getMarkedTask(storage, messages, command));
-            } else if (command[0].equals("unmark")) {
-                System.out.println(getUnmarkedTask(storage, messages, command));
-            } else if (command[0].equals("deadline")) {
-                System.out.println(getDeadlineTask(storage, messages, dates));
-            } else if (command[0].equals("event")) {
-                System.out.println(getEventTask(storage, dates, messages));
-            } else if (command[0].equals("todo")) {
-                System.out.println(getToDoTask(storage, messages, command));
-            } else {
-                System.out.println(getAddMessage(storage, messages, message));
-            }
-        }
-    }
-
-    /**
      * Reads user input and perform the corresponding action via Duet chatbot.
      * like adding, removing or marking tasks as done.
      *
@@ -155,9 +115,12 @@ public class Parser {
     }
 
     public static String getMarkedTask(Storage storage, TaskList messages, String[] command) {
+        if (command[1].length() > 1 && command[1].contains(",")) {
+            return getMarkedTasks(storage, messages, command);
+        }
         int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
         int taskNum = Integer.parseInt(command[1]);
-        assert taskNum >= 1 || taskNum <= messages.size() : "Cannot mark a task that does not exist";
+        assert taskNum >= 1 && taskNum <= messages.size() : "Cannot mark a task that does not exist";
 
         if (taskNum > messages.size() || taskNum < 1) {
             throw new IndexOutOfBoundsException();
@@ -169,7 +132,25 @@ public class Parser {
                 + messages.get(idx).getDescription();
     }
 
+    public static String getMarkedTasks(Storage storage, TaskList messages, String[] command) {
+        String[] tasksToBeMarked = command[1].split(",");
+        String taskList = "";
+        for (int i = 0; i < tasksToBeMarked.length; i++) {
+            int idx = Integer.parseInt(tasksToBeMarked[i]) - 1;
+            messages.get(idx).markAsDone();
+            if (taskList.length() > 0) {
+                taskList += "\n";
+            }
+            taskList += " [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription();
+        }
+        storage.save(messages.getTasks());
+        return "Nice! I've marked these tasks as done:\n" + taskList;
+    }
+
     public static String getUnmarkedTask(Storage storage, TaskList messages, String[] command) {
+        if (command[1].length() > 1 && command[1].contains(",")) {
+            return getUnmarkedTasks(storage, messages, command);
+        }
         int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
         int taskNum = Integer.parseInt(command[1]);
         assert taskNum >= 1 || taskNum <= messages.size() : "Cannot unmark a task that does not exist";
@@ -182,6 +163,21 @@ public class Parser {
         storage.save(messages.getTasks());
         return "OK, I've marked this task as not done yet:\n" + " [" + messages.get(idx).getStatusIcon()
                 + "] " + messages.get(idx).getDescription();
+    }
+
+    public static String getUnmarkedTasks(Storage storage, TaskList messages, String[] command) {
+        String[] tasksToBeUnmarked = command[1].split(",");
+        String taskList = "";
+        for (int i = 0; i < tasksToBeUnmarked.length; i++) {
+            int idx = Integer.parseInt(tasksToBeUnmarked[i]) - 1;
+            messages.get(idx).unmarkAsDone();
+            if (taskList.length() > 0) {
+                taskList += "\n";
+            }
+            taskList += " [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription();
+        }
+        storage.save(messages.getTasks());
+        return "Nice! I've unmarked these tasks:\n" + taskList;
     }
 
     /**
@@ -328,30 +324,34 @@ public class Parser {
 
     public static String getDeletedTask(Storage storage, TaskList messages,
             String message, String[] command) {
-        int taskNum = Integer.parseInt(command[1]);
-        assert taskNum <= messages.size() || taskNum >= 1 : "Task does not exist";
-        if (message.trim().equals("delete")) {
-            try {
-                throw new EmptyInputException("The description for delete cannot be empty.");
-            } catch (EmptyInputException e) {
-                return e.getMessage();
+        try {
+            int taskNum = Integer.parseInt(command[1]);
+            assert taskNum <= messages.size() || taskNum >= 1 : "Task does not exist";
+            if (message.trim().equals("delete")) {
+                try {
+                    throw new EmptyInputException("The description for delete cannot be empty.");
+                } catch (EmptyInputException e) {
+                    return e.getMessage();
+                }
             }
-        }
-        if (taskNum > messages.size() || taskNum < 1) {
-            try {
-                throw new InvalidInputException("The task that you want to delete does not exist.");
-            } catch (InvalidInputException e) {
-                return e.getMessage();
+            if (taskNum > messages.size() || taskNum < 1) {
+                try {
+                    throw new InvalidInputException("The task that you want to delete does not exist.");
+                } catch (InvalidInputException e) {
+                    return e.getMessage();
+                }
             }
+            int idx = Integer.parseInt(command[1]) - 1; // decrements index since ArrayList is zero-indexed
+            Task deletedTask = messages.get(idx);
+            messages.remove(idx);
+            String otherDesc = "";
+            otherDesc += updateCurrentTaskMessage(messages, otherDesc);
+            storage.save(messages.getTasks());
+            return "Noted. I've removed this task:\n" + " " + deletedTask.toString()
+                    + "\n" + otherDesc;
+        } catch (NumberFormatException e) {
+            return "Please delete one task at a time";
         }
-        int idx = Integer.parseInt(command[1]) - 1; // decrements index since ArrayList is zero-indexed
-        Task deletedTask = messages.get(idx);
-        messages.remove(idx);
-        String otherDesc = "";
-        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
-        storage.save(messages.getTasks());
-        return "Noted. I've removed this task:\n" + " " + deletedTask.toString()
-                + "\n" + otherDesc;
     }
 
     /**
