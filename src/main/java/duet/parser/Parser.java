@@ -76,32 +76,26 @@ public class Parser {
         String[] command = message.split(" ");
         String[] dates = message.split("/");
 
-        try {
-            if (message.equals("bye")) {
-                return getByeMessage();
-            } else if (message.equals("list")) {
-                return getTaskList(messages);
-            } else if (command[0].equals("find")) {
-                return getFindResults(command, messages);
-            } else if (command[0].equals("mark")) {
-                return getMarkedTask(storage, messages, command);
-            } else if (command[0].equals("unmark")) {
-                return getUnmarkedTask(storage, messages, command);
-            } else if (command[0].equals("deadline")) {
-                return getDeadlineTask(storage, messages, dates);
-            } else if (command[0].equals("event")) {
-                return getEventTask(storage, dates, messages);
-            } else if (command[0].equals("todo")) {
-                return getToDoTask(storage, messages, command);
-            } else if (command[0].equals("delete")) {
-                return getDeletedTask(storage, messages, message, command);
-            } else {
-                return getAddMessage(storage, messages, message);
-            }
-        } catch (EmptyInputException | InvalidInputException e) {
-            return e.getMessage();
-        } catch (IndexOutOfBoundsException e) {
-            return e.getMessage();
+        if (message.equals("bye")) {
+            return getByeMessage();
+        } else if (message.equals("list")) {
+            return getTaskList(messages);
+        } else if (command[0].equals("find")) {
+            return getFindResults(command, messages);
+        } else if (command[0].equals("mark")) {
+            return getMarkedTask(storage, messages, command);
+        } else if (command[0].equals("unmark")) {
+            return getUnmarkedTask(storage, messages, command);
+        } else if (command[0].equals("deadline")) {
+            return getDeadlineTask(storage, messages, dates);
+        } else if (command[0].equals("event")) {
+            return getEventTask(storage, dates, messages);
+        } else if (command[0].equals("todo")) {
+            return getToDoTask(storage, messages, command);
+        } else if (command[0].equals("delete")) {
+            return getDeletedTask(storage, messages, message, command);
+        } else {
+            return getAddMessage(storage, messages, message);
         }
     }
 
@@ -166,10 +160,11 @@ public class Parser {
         assert taskNum >= 1 || taskNum <= messages.size() : "Cannot mark a task that does not exist";
 
         if (taskNum > messages.size() || taskNum < 1) {
-            throw new IndexOutOfBoundsException("Marked task does not exist");
+            throw new IndexOutOfBoundsException();
         }
-        messages.get(idx).markAsDone();
+
         storage.save(messages.getTasks());
+        messages.get(idx).markAsDone();
         return "Nice! I've marked this task as done:\n" + "  [" + messages.get(idx).getStatusIcon() + "] "
                 + messages.get(idx).getDescription();
     }
@@ -180,11 +175,11 @@ public class Parser {
         assert taskNum >= 1 || taskNum <= messages.size() : "Cannot unmark a task that does not exist";
 
         if (taskNum > messages.size() || taskNum < 1) {
-            throw new IndexOutOfBoundsException("Unmarked task does not exist.");
+            throw new IndexOutOfBoundsException();
         }
 
-        storage.save(messages.getTasks());
         messages.get(idx).unmarkAsDone();
+        storage.save(messages.getTasks());
         return "OK, I've marked this task as not done yet:\n" + " [" + messages.get(idx).getStatusIcon()
                 + "] " + messages.get(idx).getDescription();
     }
@@ -222,7 +217,7 @@ public class Parser {
 
         Task currentTask = getFormattedDeadlineTask(messages, date, desc);
         String otherDesc = "";
-        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
+        updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
         return "Got it. I've added this task:\n " + currentTask.toString()
                 + "\n" + otherDesc;
@@ -280,7 +275,7 @@ public class Parser {
         }
         Task currentTask = getFormattedEventTask(messages, desc, fromDate, toDate);
         String otherDesc = "";
-        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
+        updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
         return "Got it. I've added this task:\n" + " " + currentTask.toString() + "\n"
                 + "\n" + otherDesc;
@@ -311,7 +306,7 @@ public class Parser {
         messages.add(new ToDo(desc));
         Task currentTask = messages.get(messages.size() - 1);
         String otherDesc = "";
-        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
+        updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
         return "Got it. I've added this task:\n" + " " + currentTask.toString()
                 + "\n" + otherDesc;
@@ -323,11 +318,11 @@ public class Parser {
      * @param messages A TaskList of messages.
      * @param otherDesc A String consists of the number of tasks.
      */
-    public static String updateCurrentTaskMessage(TaskList messages, String otherDesc) {
+    public static void updateCurrentTaskMessage(TaskList messages, String otherDesc) {
         if (messages.size() > 1) {
-            return "Now you have " + messages.size() + " tasks in the list.";
+            otherDesc += "Now you have " + messages.size() + " tasks in the list.";
         } else {
-            return "Now you have " + messages.size() + " task in the list.";
+            otherDesc += "Now you have " + messages.size() + " task in the list.";
         }
     }
 
@@ -353,7 +348,7 @@ public class Parser {
         Task deletedTask = messages.get(idx);
         messages.remove(idx);
         String otherDesc = "";
-        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
+        updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
         return "Noted. I've removed this task:\n" + " " + deletedTask.toString()
                 + "\n" + otherDesc;
