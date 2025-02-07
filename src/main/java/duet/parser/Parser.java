@@ -35,6 +35,7 @@ public class Parser {
             throws EmptyInputException, InvalidInputException {
         String[] command = message.split(" ");
         String[] dates = message.split("/");
+        assert message.length() != 0 : "Command should not be empty";
 
         if (message.equals("bye")) {
             return "Bye. Hope to see you again soon!";
@@ -77,6 +78,8 @@ public class Parser {
             }
         } else if (command[0].equals("mark")) {
             int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
+            int taskToBeMarked = Integer.parseInt(command[1]);
+            assert taskToBeMarked <= messages.size() : "Task to be marked should be in the task list already.";
 
             if (Integer.parseInt(command[1]) > messages.size()) {
                 throw new IndexOutOfBoundsException();
@@ -88,6 +91,8 @@ public class Parser {
                     + messages.get(idx).getDescription();
         } else if (command[0].equals("unmark")) {
             int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
+            int taskToBeUnmarked = Integer.parseInt(command[1]);
+            assert taskToBeUnmarked <= messages.size() : "Task to be unmarked should be in the task list already.";
 
             if (Integer.parseInt(command[1]) > messages.size()) {
                 throw new IndexOutOfBoundsException();
@@ -98,6 +103,7 @@ public class Parser {
             return "OK, I've marked this task as not done yet:\n" + " [" + messages.get(idx).getStatusIcon()
                     + "] " + messages.get(idx).getDescription();
         } else if (command[0].equals("deadline")) {
+            assert dates.length >= 2 : "Deadline task must have a deadline";
             String desc = "";
             String[] descArray = dates[0].split(" ");
 
@@ -138,6 +144,7 @@ public class Parser {
             return "Got it. I've added this task:\n " + currentTask.toString()
                     + "\n" + otherDesc;
         } else if (command[0].equals("event")) {
+            assert dates.length >= 3 : "Event task must have both a start and end date";
             String desc = "";
             String[] descArray = dates[0].split(" ");
 
@@ -266,6 +273,7 @@ public class Parser {
             String message = ui.nextLine();
             String[] command = message.split(" ");
             String[] dates = message.split("/");
+            assert message.length() != 0 : "Command should not be empty";
 
             if (message.equals("bye")) {
                 System.out.println("Bye. Hope to see you again soon!");
@@ -303,6 +311,8 @@ public class Parser {
                 }
             } else if (command[0].equals("mark")) {
                 int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
+                int taskToBeMarked = Integer.parseInt(command[1]);
+                assert taskToBeMarked <= messages.size() : "Task to be marked should be in the task list already.";
 
                 if (Integer.parseInt(command[1]) > messages.size()) {
                     throw new IndexOutOfBoundsException();
@@ -315,6 +325,8 @@ public class Parser {
                 storage.save(messages.getTasks());
             } else if (command[0].equals("unmark")) {
                 int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
+                int taskToBeUnmarked = Integer.parseInt(command[1]);
+                assert taskToBeUnmarked <= messages.size() : "Task to be unmarked should be in the task list already.";
 
                 if (Integer.parseInt(command[1]) > messages.size()) {
                     throw new IndexOutOfBoundsException();
@@ -326,6 +338,7 @@ public class Parser {
                         + messages.get(idx).getDescription());
                 storage.save(messages.getTasks());
             } else if (command[0].equals("deadline")) {
+                assert dates.length >= 2 : "Deadline task must have a deadline";
                 String desc = "";
                 String[] descArray = dates[0].split(" ");
 
@@ -364,6 +377,7 @@ public class Parser {
 
                 storage.save(messages.getTasks());
             } else if (command[0].equals("event")) {
+                assert dates.length >= 3 : "Event task must have both a start and end date";
                 String desc = "";
                 String[] descArray = dates[0].split(" ");
 
