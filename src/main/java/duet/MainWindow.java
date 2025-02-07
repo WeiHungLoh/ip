@@ -55,20 +55,37 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() throws EmptyInputException, InvalidInputException {
         String input = userInput.getText();
-        String response = duet.getResponse(input);
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
-        );
-        userInput.clear();
-
-        String byeMessage = "Bye. Hope to see you again soon!";
-        if (input.equals("bye")) {
+        try {
+            String response = duet.getResponse(input);
             dialogContainer.getChildren().addAll(
-                DialogBox.getDukeDialog(byeMessage, dukeImage)
+                    DialogBox.getUserDialog(input, userImage),
+                    DialogBox.getDukeDialog(response, dukeImage)
             );
-            closeWindow();
+
+            String byeMessage = "Bye. Hope to see you again soon!";
+            if (input.equals("bye")) {
+                dialogContainer.getChildren().addAll(
+                    DialogBox.getDukeDialog(byeMessage, dukeImage)
+                );
+                closeWindow();
+            }
+        } catch (EmptyInputException | InvalidInputException e) {
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getDukeDialog(e.getMessage(), dukeImage)
+            );
+        } catch (NumberFormatException e) {
+            dialogContainer.getChildren().addAll(
+                DialogBox.getDukeDialog(e.getMessage(), dukeImage)
+            );
+        } catch (Exception e) {
+            dialogContainer.getChildren().addAll(
+                DialogBox.getDukeDialog("An unexpected error occurred. Please "
+                        + "ensure that you have added task description, start or end date in the correct format"
+                        + ". If you're marking/unmarking tasks as done, make sure they already exist",
+                        dukeImage)
+            );
         }
+        userInput.clear();
     }
 
     private void closeWindow() {
