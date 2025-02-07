@@ -98,7 +98,7 @@ public class Parser {
             return getAddMessage(storage, messages, message);
         }
     }
-    
+
     public static String getByeMessage() {
         return "Bye. Hope to see you again soon!";
     }
@@ -121,7 +121,7 @@ public class Parser {
     }
 
     /**
-     * Returns a list of find results that match a keyword. 
+     * Returns a list of find results that match a keyword.
      *
      * @param command The type of command like deadline, todo or event.
      * @param messages A tasklist of messages.
@@ -224,7 +224,7 @@ public class Parser {
     }
 
     /**
-     * Returns a Task that contains a newly formatted deadline. 
+     * Returns a Task that contains a newly formatted deadline.
      *
      * @param messages A TaskList of messages.
      * @param date A String consists of deadline of task.
@@ -327,7 +327,7 @@ public class Parser {
     }
 
     public static String getDeletedTask(Storage storage, TaskList messages,
-            String message, String[] command){
+            String message, String[] command) {
         int taskNum = Integer.parseInt(command[1]);
         assert taskNum <= messages.size() || taskNum >= 1 : "Task does not exist";
         if (message.trim().equals("delete")) {

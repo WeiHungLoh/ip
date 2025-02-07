@@ -74,7 +74,7 @@ public class Storage {
                 } else if (taskType.equals("E")) {
                     loadEventTask(tasks, taskType);
                 } else {
-                   
+                    loadTask(tasks, taskType);
                 }
             }
 
@@ -86,7 +86,7 @@ public class Storage {
     }
 
     /**
-     * Updates ArrayList<Task> with ToDO task.
+     * Updates ArrayList with ToDo task.
      *
      * @param tasks An ArrayList of tasks.
      * @param task A String consists of ToDo task.
@@ -105,7 +105,7 @@ public class Storage {
     }
 
     /**
-     * Updates ArrayList<Task> with deadline task.
+     * Updates ArrayList with deadline task.
      *
      * @param tasks An ArrayList of tasks.
      * @param task A String consists of Deadline task.
@@ -151,7 +151,14 @@ public class Storage {
             tasks.add(new Event(desc[0].trim(), from, to));
         }
     }
-    
+
+    /**
+     * Updates ArrayList with normal task.
+     *
+     * @param tasks An ArrayList of tasks.
+     * @param task A String consists of normal task.
+     * @throws EmptyInputException If description is empty.
+     */
     public void loadTask(ArrayList<Task> tasks, String task) throws EmptyInputException {
         boolean isDone = task.substring(3, 4).equals("X") ? true : false;
         String[] desc = task.split("\\]");
