@@ -68,13 +68,13 @@ public class Storage {
                 String taskType = task.substring(3, 4);
 
                 if (taskType.equals("T")) {
-                    loadToDoTask(tasks, taskType);
+                    loadToDoTask(tasks, task);
                 } else if (taskType.equals("D")) {
-                    loadDeadlineTask(tasks, taskType);
+                    loadDeadlineTask(tasks, task);
                 } else if (taskType.equals("E")) {
-                    loadEventTask(tasks, taskType);
+                    loadEventTask(tasks, task);
                 } else {
-                    loadTask(tasks, taskType);
+                    loadTask(tasks, task);
                 }
             }
 
