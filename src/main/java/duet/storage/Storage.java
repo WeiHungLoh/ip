@@ -69,51 +69,13 @@ public class Storage {
                 String taskType = task.substring(3, 4);
 
                 if (taskType.equals("T")) {
-                    boolean isDone = task.substring(6, 7).equals("X") ? true : false;
-                    String desc = task.substring(9);
-
-                    if (isDone) {
-                        tasks.add(new ToDo(desc));
-                        tasks.get(tasks.size() - 1).markAsDone();
-                    } else {
-                        tasks.add(new ToDo(desc));
-                    }
+                    loadToDoTask(tasks, task);
                 } else if (taskType.equals("D")) {
-                    boolean isDone = task.substring(6, 7).equals("X") ? true : false;
-                    String body = task.substring(9);
-                    String[] desc = body.split("\\(");
-                    String by = desc[1].replace(")", "").replace("by: ", "");
-
-                    if (isDone) {
-                        tasks.add(new Deadline(desc[0].trim(), by));
-                        tasks.get(tasks.size() - 1).markAsDone();
-                    } else {
-                        tasks.add(new Deadline(desc[0].trim(), by));
-                    }
+                    loadDeadlineTask(tasks, task);
                 } else if (taskType.equals("E")) {
-                    boolean isDone = task.substring(6, 7).equals("X") ? true : false;
-                    String body = task.substring(9);
-                    String[] desc = body.split("\\(");
-                    String[] dateRange = desc[1].split(" to: ");
-                    String from = dateRange[0].replace("from: ", "");
-                    String to = dateRange[1].replace(")", "");
-
-                    if (isDone) {
-                        tasks.add(new Event(desc[0].trim(), from, to));
-                        tasks.get(tasks.size() - 1).markAsDone();
-                    } else {
-                        tasks.add(new Event(desc[0].trim(), from, to));
-                    }
+                    loadEventTask(tasks, task);
                 } else {
-                    boolean isDone = task.substring(3, 4).equals("X") ? true : false;
-                    String[] desc = task.split("\\]");
-
-                    if (isDone) {
-                        tasks.add(new Task(desc[1].trim()));
-                        tasks.get(tasks.size() - 1).markAsDone();
-                    } else {
-                        tasks.add(new Task(desc[1].trim()));
-                    }
+                    loadTask(tasks, task);
                 }
             }
 
@@ -122,5 +84,91 @@ public class Storage {
             System.out.println("Unable to load tasks: " + e.getMessage());
         }
         return tasks;
+    }
+
+    /**
+     * Updates ArrayList with ToDo task.
+     *
+     * @param tasks An ArrayList of tasks.
+     * @param task A String consists of ToDo task.
+     * @throws EmptyInputException
+     */
+    public void loadToDoTask(ArrayList<Task> tasks, String task) throws EmptyInputException {
+        boolean isDone = task.substring(6, 7).equals("X") ? true : false;
+        String desc = task.substring(9);
+
+        if (isDone) {
+            tasks.add(new ToDo(desc));
+            tasks.get(tasks.size() - 1).markAsDone();
+        } else {
+            tasks.add(new ToDo(desc));
+        }
+    }
+
+    /**
+     * Updates ArrayList with deadline task.
+     *
+     * @param tasks An ArrayList of tasks.
+     * @param task A String consists of Deadline task.
+     * @throws EmptyInputException If description is empty.
+     * @throws InvalidInputException If due date is empty.
+     */
+    public void loadDeadlineTask(ArrayList<Task> tasks, String task)
+            throws EmptyInputException, InvalidInputException {
+        boolean isDone = task.substring(6, 7).equals("X") ? true : false;
+        String body = task.substring(9);
+        String[] desc = body.split("\\(");
+        String by = desc[1].replace(")", "").replace("by: ", "");
+
+        if (isDone) {
+            tasks.add(new Deadline(desc[0].trim(), by));
+            tasks.get(tasks.size() - 1).markAsDone();
+        } else {
+            tasks.add(new Deadline(desc[0].trim(), by));
+        }
+    }
+
+    /**
+     * Updates an ArrayList with event task.
+     *
+     * @param tasks An ArrayList of tasks.
+     * @param task A String consts of Event task.
+     * @throws EmptyInputException If description is empty.
+     * @throws InvalidInputException If start or end date is empty.
+     */
+    public void loadEventTask(ArrayList<Task> tasks, String task)
+            throws EmptyInputException, InvalidInputException {
+        boolean isDone = task.substring(6, 7).equals("X") ? true : false;
+        String body = task.substring(9);
+        String[] desc = body.split("\\(");
+        String[] dateRange = desc[1].split(" to: ");
+        String from = dateRange[0].replace("from: ", "");
+        String to = dateRange[1].replace(")", "");
+
+        if (isDone) {
+            tasks.add(new Event(desc[0].trim(), from, to));
+            tasks.get(tasks.size() - 1).markAsDone();
+        } else {
+            tasks.add(new Event(desc[0].trim(), from, to));
+        }
+    }
+
+    /**
+     * Updates ArrayList with normal task.
+     *
+     * @param tasks An ArrayList of tasks.
+     * @param task A String consists of normal task.
+     * @throws EmptyInputException If description is empty.
+     */
+    public void loadTask(ArrayList<Task> tasks, String task) throws EmptyInputException {
+        boolean isDone = task.substring(3, 4).equals("X") ? true : false;
+        String[] desc = task.split("\\]");
+
+        if (isDone) {
+            tasks.add(new Task(desc[1].trim()));
+            tasks.get(tasks.size() - 1).markAsDone();
+        } else {
+            tasks.add(new Task(desc[1].trim()));
+        }
     }
 }

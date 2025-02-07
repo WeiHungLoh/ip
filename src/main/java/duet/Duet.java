@@ -46,7 +46,7 @@ public class Duet {
      */
     public Duet() {
         ui = new Ui();
-        storage = new Storage(FILE_NAME);
+        storage = new Storage("data/duet.txt");
         try {
             ArrayList<Task> loadedTasks = storage.load();
             tasks = new TaskList(loadedTasks);
