@@ -52,6 +52,9 @@ public class Parser {
             return getEventTask(storage, dates, messages);
         } else if (command[0].equals("todo")) {
             return getToDoTask(storage, messages, command);
+        } else if (command[0].equals("delete")
+                && command.length > 1 && command[1].contains(",")) {
+            return getMultipleDeletedTasks(storage, messages, message, command);
         } else if (command[0].equals("delete")) {
             return getDeletedTask(storage, messages, message, command);
         } else {
@@ -122,9 +125,13 @@ public class Parser {
         int taskNum = Integer.parseInt(command[1]);
         assert taskNum >= 1 && taskNum <= messages.size() : "Cannot mark a task that does not exist";
 
-        if (taskNum > messages.size() || taskNum < 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        try {
+            if (taskNum > messages.size() || taskNum < 1) {
+                throw new InvalidInputException("Task that you want to mark does not exist");
+            } 
+        } catch(InvalidInputException e) {
+            return e.getMessage();
+        } 
 
         storage.save(messages.getTasks());
         messages.get(idx).markAsDone();
@@ -135,16 +142,23 @@ public class Parser {
     public static String getMarkedTasks(Storage storage, TaskList messages, String[] command) {
         String[] tasksToBeMarked = command[1].split(",");
         String taskList = "";
-        for (int i = 0; i < tasksToBeMarked.length; i++) {
-            int idx = Integer.parseInt(tasksToBeMarked[i]) - 1;
-            messages.get(idx).markAsDone();
-            if (taskList.length() > 0) {
-                taskList += "\n";
+        try {
+            for (int i = 0; i < tasksToBeMarked.length; i++) {
+                int idx = Integer.parseInt(tasksToBeMarked[i]) - 1;
+                if (idx + 1 > messages.size() || idx < 0) {
+                    throw new InvalidInputException("Please only mark tasks that exist");
+                }
+                messages.get(idx).markAsDone();
+                if (taskList.length() > 0) {
+                    taskList += "\n";
+                }
+                taskList += " [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription();
             }
-            taskList += " [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription();
+            storage.save(messages.getTasks());
+            return "Nice! I've marked these tasks as done:\n" + taskList;
+        } catch (InvalidInputException e) {
+            return e.getMessage();
         }
-        storage.save(messages.getTasks());
-        return "Nice! I've marked these tasks as done:\n" + taskList;
     }
 
     public static String getUnmarkedTask(Storage storage, TaskList messages, String[] command) {
@@ -155,8 +169,12 @@ public class Parser {
         int taskNum = Integer.parseInt(command[1]);
         assert taskNum >= 1 || taskNum <= messages.size() : "Cannot unmark a task that does not exist";
 
-        if (taskNum > messages.size() || taskNum < 1) {
-            throw new IndexOutOfBoundsException();
+        try {
+            if (taskNum > messages.size() || taskNum < 1) {
+                throw new InvalidInputException("Task that you want to unmark does not exist");
+            }
+        } catch(InvalidInputException e) {
+            return e.getMessage();
         }
 
         messages.get(idx).unmarkAsDone();
@@ -168,16 +186,23 @@ public class Parser {
     public static String getUnmarkedTasks(Storage storage, TaskList messages, String[] command) {
         String[] tasksToBeUnmarked = command[1].split(",");
         String taskList = "";
-        for (int i = 0; i < tasksToBeUnmarked.length; i++) {
-            int idx = Integer.parseInt(tasksToBeUnmarked[i]) - 1;
-            messages.get(idx).unmarkAsDone();
-            if (taskList.length() > 0) {
-                taskList += "\n";
+        try {
+            for (int i = 0; i < tasksToBeUnmarked.length; i++) {
+                int idx = Integer.parseInt(tasksToBeUnmarked[i]) - 1;
+                if (idx + 1 > messages.size() || idx < 0) {
+                    throw new InvalidInputException("Task that you want to unmark does not exist");
+                }
+                messages.get(idx).unmarkAsDone();
+                if (taskList.length() > 0) {
+                    taskList += "\n";
+                }
+                taskList += " [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription();
             }
-            taskList += " [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription();
+            storage.save(messages.getTasks());
+            return "Nice! I've unmarked these tasks:\n" + taskList;
+        } catch(InvalidInputException e) {
+            return e.getMessage();
         }
-        storage.save(messages.getTasks());
-        return "Nice! I've unmarked these tasks:\n" + taskList;
     }
 
     /**
@@ -194,6 +219,15 @@ public class Parser {
             throws EmptyInputException, InvalidInputException {
         String desc = "";
         String[] descArray = dates[0].split(" ");
+        try {
+            if (descArray.length == 1) {
+                throw new EmptyInputException("Deadline task must have a description");
+            } else if (descArray.length < 2) {
+                throw new InvalidInputException("Deadline task must have a due date in YYYY-MM-dd format");
+            }
+        } catch (EmptyInputException | InvalidInputException e) {
+            return e.getMessage();
+        }
         assert dates.length > 1 : "Deadline must be provided";
         for (int j = 1; j < descArray.length; j++) {
             if (j > 1) {
@@ -245,6 +279,16 @@ public class Parser {
         String desc = "";
         String[] descArray = dates[0].split(" ");
         assert dates.length > 2 : "Both start and end dates must be provided.";
+        try {
+            if (descArray.length == 1) {
+                throw new EmptyInputException("Event must have a description, start and end date");
+            }
+            else if (descArray.length < 3) {
+                throw new InvalidInputException("Event must have a start and end date in YYYY-MM-dd format");
+            }
+        } catch (EmptyInputException | InvalidInputException e) {
+            return e.getMessage();
+        }
         for (int i = 1; i < descArray.length; i++) {
             if (i > 1) {
                 desc += " ";
@@ -324,34 +368,65 @@ public class Parser {
 
     public static String getDeletedTask(Storage storage, TaskList messages,
             String message, String[] command) {
-        try {
-            int taskNum = Integer.parseInt(command[1]);
-            assert taskNum <= messages.size() || taskNum >= 1 : "Task does not exist";
-            if (message.trim().equals("delete")) {
-                try {
-                    throw new EmptyInputException("The description for delete cannot be empty.");
-                } catch (EmptyInputException e) {
-                    return e.getMessage();
-                }
+        if (command.length == 1) {
+            try {
+                throw new EmptyInputException("The description for delete cannot be empty.");
+            } catch (EmptyInputException e) {
+                return e.getMessage();
             }
-            if (taskNum > messages.size() || taskNum < 1) {
-                try {
-                    throw new InvalidInputException("The task that you want to delete does not exist.");
-                } catch (InvalidInputException e) {
-                    return e.getMessage();
-                }
-            }
-            int idx = Integer.parseInt(command[1]) - 1; // decrements index since ArrayList is zero-indexed
-            Task deletedTask = messages.get(idx);
-            messages.remove(idx);
-            String otherDesc = "";
-            otherDesc += updateCurrentTaskMessage(messages, otherDesc);
-            storage.save(messages.getTasks());
-            return "Noted. I've removed this task:\n" + " " + deletedTask.toString()
-                    + "\n" + otherDesc;
-        } catch (NumberFormatException e) {
-            return "Please delete one task at a time";
         }
+        int taskNum = Integer.parseInt(command[1]);
+        assert taskNum <= messages.size() || taskNum >= 1 : "Task does not exist";
+
+        if (taskNum > messages.size() || taskNum < 1) {
+            try {
+                throw new InvalidInputException("The task that you want to delete does not exist.");
+            } catch (InvalidInputException e) {
+                return e.getMessage();
+            }
+        }
+
+        int idx = Integer.parseInt(command[1]) - 1; // decrements index since ArrayList is zero-indexed
+        Task deletedTask = messages.get(idx);
+        messages.remove(idx);
+        String otherDesc = "";
+        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
+        storage.save(messages.getTasks());
+        return "Noted. I've removed this task:\n" + " " + deletedTask.toString()
+                + "\n" + otherDesc;
+    }
+
+    public static String getMultipleDeletedTasks(Storage storage, TaskList messages,
+            String message, String[] command) {
+        String[] tasksToBeDeleted = command[1].split(",");
+        int[] tasksIdx = new int[tasksToBeDeleted.length];
+        ArrayList<Task> oldTasks = new ArrayList<>();
+        try {
+            for (int i = 0; i < tasksIdx.length; i++) {
+                tasksIdx[i] = Integer.parseInt(tasksToBeDeleted[i]);
+                if (tasksIdx[i] > messages.size()) {
+                    throw new InvalidInputException("Task that you want to delete does not exist");
+                }
+                oldTasks.add(messages.get(tasksIdx[i] - 1));
+            }
+        } catch (InvalidInputException e) {
+            return e.getMessage();
+        }
+
+        String deletedTaskList = "";
+        String otherDesc = "";
+        for (int j = 0; j < tasksIdx.length; j++) {
+            Task deletedTask = oldTasks.get(j);
+            int deletedIdx = messages.getTasks().indexOf(deletedTask);
+            messages.remove(deletedIdx);
+            if (deletedTaskList.length() > 0) {
+                deletedTaskList += "\n ";
+            }
+            deletedTaskList += deletedTask.toString();
+        }
+        storage.save(messages.getTasks());
+        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
+        return "Noted. I've removed these tasks:\n" + deletedTaskList + "\n" + otherDesc;
     }
 
     /**
