@@ -115,17 +115,15 @@ public class Storage {
      */
     public void loadDeadlineTask(ArrayList<Task> tasks, String task)
             throws EmptyInputException, InvalidInputException {
-        boolean isDone = task.substring(6, 7).equals("X") ? true : false;
+        boolean isDone = task.substring(6, 7).equals("X");
         String body = task.substring(9);
         String[] desc = body.split("\\(");
         String by = desc[1].replace(")", "").replace("by: ", "");
 
         if (isDone) {
-            tasks.add(new Deadline(desc[0].trim(), by));
             tasks.get(tasks.size() - 1).markAsDone();
-        } else {
-            tasks.add(new Deadline(desc[0].trim(), by));
         }
+        tasks.add(new Deadline(desc[0].trim(), by));
     }
 
     /**
