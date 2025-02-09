@@ -239,8 +239,18 @@ public class Parser {
             }
             desc += descArray[j];
         }
-        String date = "";
+        String date = getDate(dates);
+        Task currentTask = getFormattedDeadlineTask(messages, date, desc);
+        String otherDesc = "";
+        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
+        storage.save(messages.getTasks());
+        return "Got it. I've added this task:\n " + currentTask.toString()
+                + "\n" + otherDesc;
+    }
+
+    public static String getDate(String[] dates) {
         String byWhen = dates[1].trim();
+        String date = "";
         String[] dueDate = byWhen.split(" ");
         for (int i = 1; i < dueDate.length; i++) {
             if (i > 1) {
@@ -248,13 +258,7 @@ public class Parser {
             }
             date += dueDate[i];
         }
-
-        Task currentTask = getFormattedDeadlineTask(messages, date, desc);
-        String otherDesc = "";
-        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
-        storage.save(messages.getTasks());
-        return "Got it. I've added this task:\n " + currentTask.toString()
-                + "\n" + otherDesc;
+        return date;
     }
 
     /**
@@ -278,6 +282,16 @@ public class Parser {
         return currentTask;
     }
 
+    /**
+     * Returns a String consists of event description, start and end dates.
+     *
+     * @param storage Storage to save and load data.
+     * @param dates String array containing start and end dates.
+     * @param messages The current tasks in a TaskList.
+     * @return A Strings consists of event tasks.
+     * @throws EmptyInputException If description is empty.
+     * @throws InvalidInputException If start or end date is empty.
+     */
     public static String getEventTask(Storage storage, String[] dates, TaskList messages)
             throws EmptyInputException, InvalidInputException {
         String desc = "";
@@ -299,17 +313,25 @@ public class Parser {
             }
             desc += descArray[i];
         }
-        String fromDate = "";
-        String from = dates[1];
-        String[] fromArray = from.split(" ");
-        for (int j = 1; j < fromArray.length; j++) {
-            if (j > 1) {
-                fromDate += " ";
-            }
-            fromDate += fromArray[j];
-        }
-        String toDate = "";
+        String fromDate = getFromDate(dates);
+        String toDate = getToDate(dates);
+        Task currentTask = getFormattedEventTask(messages, desc, fromDate, toDate);
+        String otherDesc = "";
+        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
+        storage.save(messages.getTasks());
+        return "Got it. I've added this task:\n" + " " + currentTask.toString() + "\n"
+                + "\n" + otherDesc;
+    }
+    
+    /**
+     * Returns a String consists of end date for event task.
+     *
+     * @param dates A String array containing start and end date.
+     * @return A String consists of end date date.
+     */
+    public static String getToDate(String[] dates) {
         String to = dates[2];
+        String toDate = "";
         String[] toArray = to.split(" ");
         for (int k = 1; k < toArray.length; k++) {
             if (k > 1) {
@@ -317,12 +339,26 @@ public class Parser {
             }
             toDate += toArray[k];
         }
-        Task currentTask = getFormattedEventTask(messages, desc, fromDate, toDate);
-        String otherDesc = "";
-        otherDesc += updateCurrentTaskMessage(messages, otherDesc);
-        storage.save(messages.getTasks());
-        return "Got it. I've added this task:\n" + " " + currentTask.toString() + "\n"
-                + "\n" + otherDesc;
+        return toDate;
+    }
+
+    /**
+     * Returns a String consists of start date for event task.
+     *
+     * @param dates A String array consists of start and end date.
+     * @return A String of start date.
+     */
+    public static String getFromDate(String[] dates) {
+        String from = dates[1];
+        String fromDate = "";
+        String[] fromArray = from.split(" ");
+        for (int j = 1; j < fromArray.length; j++) {
+            if (j > 1) {
+                fromDate += " ";
+            }
+            fromDate += fromArray[j];
+        }
+        return fromDate;
     }
 
     public static Task getFormattedEventTask(TaskList messages, String desc, String fromDate, String toDate)
@@ -413,12 +449,9 @@ public class Parser {
                 }
                 oldTasks.add(messages.get(tasksIdx[i] - 1));
             }
-            for (int j = 0; j < tasksIdx.length; j++) {
-                for (int k = j + 1; k < tasksIdx.length; k++) {
-                    if (tasksIdx[j] == tasksIdx[k]) {
-                        throw new InvalidInputException("You cannot delete the same task more than once!");
-                    }
-                }
+            boolean hasDuplicate = checkDuplicateTasks(tasksIdx);
+            if (hasDuplicate) {
+                throw new InvalidInputException("You cannot delete the same task more than once!");
             }
         } catch (InvalidInputException e) {
             return e.getMessage();
@@ -438,6 +471,23 @@ public class Parser {
         storage.save(messages.getTasks());
         otherDesc += updateCurrentTaskMessage(messages, otherDesc);
         return "Noted. I've removed these tasks:\n" + deletedTaskList + "\n" + otherDesc;
+    }
+
+    /**
+     * Returns a boolean value to check for duplicate tasks to be deleted.
+     *
+     * @param tasksIdx An array on integer containing task number.
+     * @return Boolean value to check for duplicate tasks.
+     */
+    public static boolean checkDuplicateTasks(int[] tasksIdx) {
+        for (int j = 0; j < tasksIdx.length; j++) {
+            for (int k = j + 1; k < tasksIdx.length; k++) {
+                if (tasksIdx[j] == tasksIdx[k]) {
+                   return true;
+                }
+            }
+        } 
+        return false;
     }
 
     /**
