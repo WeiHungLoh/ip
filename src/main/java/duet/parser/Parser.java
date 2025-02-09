@@ -35,32 +35,36 @@ public class Parser {
             throws EmptyInputException, InvalidInputException {
         String[] command = message.split(" ");
         String[] dates = message.split("/");
+        String taskType = command[0];
 
-        if (message.equals("bye")) {
+        switch (taskType) {
+        case "bye":
             return getByeMessage();
-        } else if (message.equals("list")) {
+        case "list":
             return getTaskList(messages);
-        } else if (command[0].equals("find")) {
+        case "find":
             return getFindResults(command, messages);
-        } else if (command[0].equals("mark")) {
+        case "mark":
             return getMarkedTask(storage, messages, command);
-        } else if (command[0].equals("unmark")) {
+        case "unmark":
             return getUnmarkedTask(storage, messages, command);
-        } else if (command[0].equals("deadline")) {
+        case "deadline":
             return getDeadlineTask(storage, messages, dates);
-        } else if (command[0].equals("event")) {
+        case "event":
             return getEventTask(storage, dates, messages);
-        } else if (command[0].equals("todo")) {
-            return getToDoTask(storage, messages, command);
-        } else if (command[0].equals("delete")
-                && command.length > 1 && command[1].contains(",")) {
-            return getMultipleDeletedTasks(storage, messages, message, command);
-        } else if (command[0].equals("delete")) {
-            return getDeletedTask(storage, messages, message, command);
-        } else {
+        case "todo":
+            return getToDoTask(storage, messages, command); 
+        case "delete":
+            if (command.length > 1 && command[1].contains(",")) {
+                return getMultipleDeletedTasks(storage, messages, message, command);
+            } else {
+                return getDeletedTask(storage, messages, message, command);
+            }
+        default:
             return getAddMessage(storage, messages, message);
         }
     }
+        
 
     public static String getByeMessage() {
         return "Bye. Hope to see you again soon!";
@@ -128,7 +132,7 @@ public class Parser {
         try {
             if (taskNum > messages.size() || taskNum < 1) {
                 throw new InvalidInputException("Task that you want to mark does not exist");
-            } 
+            }
         } catch(InvalidInputException e) {
             return e.getMessage();
         } 
@@ -280,10 +284,10 @@ public class Parser {
         String[] descArray = dates[0].split(" ");
         assert dates.length > 2 : "Both start and end dates must be provided.";
         try {
-            if (descArray.length == 1) {
+            if (dates.length == 1) {
                 throw new EmptyInputException("Event must have a description, start and end date");
             }
-            else if (descArray.length < 3) {
+            else if (dates.length < 3) {
                 throw new InvalidInputException("Event must have a start and end date in YYYY-MM-dd format");
             }
         } catch (EmptyInputException | InvalidInputException e) {
@@ -408,6 +412,13 @@ public class Parser {
                     throw new InvalidInputException("Task that you want to delete does not exist");
                 }
                 oldTasks.add(messages.get(tasksIdx[i] - 1));
+            }
+            for (int j = 0; j < tasksIdx.length; j++) {
+                for (int k = j + 1; k < tasksIdx.length; k++) {
+                    if (tasksIdx[j] == tasksIdx[k]) {
+                        throw new InvalidInputException("You cannot delete the same task more than once!");
+                    }
+                }
             }
         } catch (InvalidInputException e) {
             return e.getMessage();
