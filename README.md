@@ -37,7 +37,7 @@ A ~smart~ super *duper* smart chatbot with task management capabilities, such as
 ## Quick References
 📝 `todo <task name>`  
 ⏰ `deadline <task name> /by <YYYY-MM-DD>`  
-📆 `event <task name> /by <YYYY-MM-DD> /to <YYYY-MM-DD>  
+📆 `event <task name> /by <YYYY-MM-DD> /to <YYYY-MM-DD>`  
 📁 `list`  
 ❎ `mark <task index>`  
 ⚪ `unmark <task index>`  
