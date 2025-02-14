@@ -350,7 +350,7 @@ public class Parser {
         String otherDesc = "";
         otherDesc += updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
-        return "I CAN DO IT!\n. Got it. I've added this task:\n" + " " + currentTask.toString() + "\n"
+        return "I CAN DO IT!\nGot it. I've added this task:\n" + " " + currentTask.toString() + "\n"
                 + "\n" + otherDesc;
     }
 
@@ -459,7 +459,7 @@ public class Parser {
 
         int idx = Integer.parseInt(command[1]) - 1; // decrements index since ArrayList is zero-indexed
         Task deletedTask = messages.get(idx);
-        messages.remove(idx);
+        messages.getTasks().remove(idx);
         String otherDesc = "";
         otherDesc += updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
@@ -490,14 +490,13 @@ public class Parser {
 
         String deletedTaskList = "";
         String otherDesc = "";
-        for (int j = 0; j < tasksIdx.length; j++) {
-            Task deletedTask = oldTasks.get(j);
-            int deletedIdx = messages.getTasks().indexOf(deletedTask);
-            messages.remove(deletedIdx);
+        for (Task task : oldTasks) {
+            int deletedIdx = messages.getTasks().indexOf(task);
+            messages.getTasks().remove(deletedIdx);
             if (deletedTaskList.length() > 0) {
                 deletedTaskList += "\n ";
             }
-            deletedTaskList += deletedTask.toString();
+            deletedTaskList += task.toString();
         }
         storage.save(messages.getTasks());
         otherDesc += updateCurrentTaskMessage(messages, otherDesc);
