@@ -54,36 +54,42 @@ public class Storage {
      */
     public ArrayList<Task> load() throws EmptyInputException, InvalidInputException {
         ArrayList<Task> tasks = new ArrayList<>();
-
         try {
-            File file = new File(filePath);
-            if (!file.exists()) {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-            }
-
+            File file = createFilePath(filePath);
             Scanner scan = new Scanner(file);
 
             while (scan.hasNextLine()) {
                 String task = scan.nextLine();
                 String taskType = task.substring(3, 4);
-
                 if (taskType.equals("T")) {
                     loadToDoTask(tasks, task);
                 } else if (taskType.equals("D")) {
                     loadDeadlineTask(tasks, task);
                 } else if (taskType.equals("E")) {
                     loadEventTask(tasks, task);
-                } else {
-                    loadTask(tasks, task);
                 }
             }
-
             scan.close();
         } catch (IOException e) {
             System.out.println("Unable to load tasks: " + e.getMessage());
         }
         return tasks;
+    }
+
+    /**
+     * Creates a new file if it doesn't exist.
+     *
+     * @param filePath String consists of name of file path.
+     * @return File path.
+     * @throws IOException If input is invalid.
+     */
+    public static File createFilePath(String filePath) throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+        return file;
     }
 
     /**
@@ -148,25 +154,6 @@ public class Storage {
             tasks.get(tasks.size() - 1).markAsDone();
         } else {
             tasks.add(new Event(desc[0].trim(), from, to));
-        }
-    }
-
-    /**
-     * Updates ArrayList with normal task.
-     *
-     * @param tasks An ArrayList of tasks.
-     * @param task A String consists of normal task.
-     * @throws EmptyInputException If description is empty.
-     */
-    public void loadTask(ArrayList<Task> tasks, String task) throws EmptyInputException {
-        boolean isDone = task.substring(3, 4).equals("X") ? true : false;
-        String[] desc = task.split("\\]");
-
-        if (isDone) {
-            tasks.add(new Task(desc[1].trim()));
-            tasks.get(tasks.size() - 1).markAsDone();
-        } else {
-            tasks.add(new Task(desc[1].trim()));
         }
     }
 }

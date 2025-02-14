@@ -61,10 +61,9 @@ public class Parser {
                 return getDeletedTask(storage, messages, message, command);
             }
         default:
-            return getAddMessage(storage, messages, message);
+            return getInvalidCommand();
         }
     }
-        
 
     public static String getByeMessage() {
         return "Bye. Hope to see you again soon!";
@@ -121,11 +120,19 @@ public class Parser {
         }
     }
 
+    /**
+     * Returns a string consists of tasks marked as done.
+     *
+     * @param storage Storage to save and load tasks from a file path.
+     * @param messages A TaskList of inputs.
+     * @param command A String array of command by user.
+     * @return A string consists of a task marked as done.
+     */
     public static String getMarkedTask(Storage storage, TaskList messages, String[] command) {
         if (command[1].length() > 1 && command[1].contains(",")) {
             return getMarkedTasks(storage, messages, command);
         }
-        int idx = Integer.parseInt(command[1]) - 1; // decrement index since ArrayList is zero-indexed
+        int idx = Integer.parseInt(command[1]) - 1;
         int taskNum = Integer.parseInt(command[1]);
         assert taskNum >= 1 && taskNum <= messages.size() : "Cannot mark a task that does not exist";
 
@@ -143,6 +150,14 @@ public class Parser {
                 + messages.get(idx).getDescription();
     }
 
+    /**
+     * Returns a list of String of tasks marked as done.
+     *
+     * @param storage Storage to save and load tasks.
+     * @param messages A TaskList of messages.
+     * @param command A String array of command.
+     * @return Returns a String containing a list of tasks marked as done.
+     */
     public static String getMarkedTasks(Storage storage, TaskList messages, String[] command) {
         String[] tasksToBeMarked = command[1].split(",");
         String taskList = "";
@@ -165,6 +180,14 @@ public class Parser {
         }
     }
 
+     /**
+     * Returns a string consists of tasks unmarked as done.
+     *
+     * @param storage Storage to save and load tasks from a file path.
+     * @param messages A TaskList of inputs.
+     * @param command A String array of command by user.
+     * @return A string consists of a task unmarked as done.
+     */
     public static String getUnmarkedTask(Storage storage, TaskList messages, String[] command) {
         if (command[1].length() > 1 && command[1].contains(",")) {
             return getUnmarkedTasks(storage, messages, command);
@@ -187,6 +210,14 @@ public class Parser {
                 + "] " + messages.get(idx).getDescription();
     }
 
+       /**
+     * Returns a list of String of tasks unmarked as done.
+     *
+     * @param storage Storage to save and load tasks.
+     * @param messages A TaskList of messages.
+     * @param command A String array of command.
+     * @return Returns a String containing a list of tasks unmarked as done.
+     */
     public static String getUnmarkedTasks(Storage storage, TaskList messages, String[] command) {
         String[] tasksToBeUnmarked = command[1].split(",");
         String taskList = "";
@@ -491,18 +522,16 @@ public class Parser {
     }
 
     /**
-     * Returns a String consists of a general task that has been added.
+     * Returns a String consists of a invalid command message.
      *
-     * @param storage Storage where tasks are saved.
-     * @param messages A TaskList of messages.
-     * @param message A String consists of description of task.
-     * @return A String consists of task that has been added.
-     * @throws EmptyInputException
+     * @return A String consists of error message regarding invalid command.
+     * @throws InvalidInputException If unknown command is called.
      */
-    public static String getAddMessage(Storage storage, TaskList messages, String message)
-            throws EmptyInputException {
-        messages.add(new Task(message));
-        storage.save(messages.getTasks());
-        return "added: " + message;
+    public static String getInvalidCommand() throws InvalidInputException {
+        try { 
+            throw new InvalidInputException("Please enter a valid command");
+        } catch (InvalidInputException e) {
+            return e.getMessage();
+        }
     }
 }
