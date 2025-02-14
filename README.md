@@ -21,18 +21,18 @@ A ~smart~ super *duper* smart chatbot with task management capabilities, such as
 
 ## Examples
 ### Valid Commands
-🙆‍♂️ `todo do homework`
-🙆‍♂️ `deadline submit homework /by 2025-05-30`
-🙆‍♂️ `event family vacation /from 2025-06-01 /to 2025-06-15`
-🙆‍♂️ `mark 1,5,6`
-🙆‍♂️ `delete 3,2,1`
+🙆‍♂️ `todo do homework`  
+🙆‍♂️ `deadline submit homework /by 2025-05-30`  
+🙆‍♂️ `event family vacation /from 2025-06-01 /to 2025-06-15`  
+🙆‍♂️ `mark 1,5,6`  
+🙆‍♂️ `delete 3,2,1`  
 
 ### Invalid Commands
-🙅‍♂️ `TODO readbook` (uppercase not allowed)
-🙅‍♂️ `deadlinedohomework /by 2025-02-28` (no space in between command type and task name)
-🙅‍♂️ `event go overseas /from 2025-02-01` (no end date)
-🙅‍♂️ `deadline do tutorial` (no due date)
-🙅‍♂️ `event go overseas /to 2025-02-29` (no start date)
+🙅‍♂️ `TODO readbook` (uppercase not allowed)  
+🙅‍♂️ `deadlinedohomework /by 2025-02-28` (no space in between command type and task name)  
+🙅‍♂️ `event go overseas /from 2025-02-01` (no end date)  
+🙅‍♂️ `deadline do tutorial` (no due date)  
+🙅‍♂️ `event go overseas /to 2025-02-29` (no start date)  
 
 ## Quick References
 📝 `todo <task name>`
