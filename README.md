@@ -3,9 +3,9 @@ A ~smart~ super *duper* smart chatbot with task management capabilities, such as
 
 ## How it works:
 1. Deadline, todo, event commands:
-- To add a deadline task, type: deadline \<task name> /by <YYYY-MM-DD>
-- To add a todo task, type: todo \<task name>
-- To add an event task, type: event \<task name> /from <YYYY-MM-DD> /to <YYYY-MM-DD>
+- To add a deadline task, type `"deadline <task name> /by <YYYY-MM-DD>"`
+- To add a todo task, type `"todo <task name>"`
+- To add an event task, type `"event <task name> /from <YYYY-MM-DD> /to <YYYY-MM-DD>"`
 
 2. List command:
 - To view the list of tasks you have added, type "list"
@@ -39,9 +39,9 @@ A ~smart~ super *duper* smart chatbot with task management capabilities, such as
 ⏰ `deadline <task name> /by <YYYY-MM-DD>`  
 📆 `event <task name> /by <YYYY-MM-DD> /to <YYYY-MM-DD>  
 📁 `list`  
-❎ `mark \<task index>`  
-⚪ `unmark \<task index>`  
-🗑️ `delete \<task index>`  
+❎ `mark <task index>`  
+⚪ `unmark <task index>`  
+🗑️ `delete <task index>`  
 
 ## Common Error Messages
 If you receive an error message:
