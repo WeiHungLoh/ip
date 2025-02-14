@@ -1,4 +1,4 @@
-# Duet Chatbot :+1:
+# Duet Chatbot
 A ~smart~ super *duper* smart chatbot with task management capabilities, such as creating To-Do, Deadline and Event tasks. 
 
 ## How it works:
