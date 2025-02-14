@@ -34,7 +34,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        String response = "Hello! I'm Duet\nWhat can I do for you?";
+        String response = "Hello! I'm Duet. I CAN DO IT!\nWhat can I do for you?";
         dialogContainer.getChildren().addAll(
             DialogBox.getDukeDialog(response, dukeImage)
         );
@@ -72,10 +72,6 @@ public class MainWindow extends AnchorPane {
         } catch (EmptyInputException | InvalidInputException e) {
             dialogContainer.getChildren().addAll(
                     DialogBox.getDukeDialog(e.getMessage(), dukeImage)
-            );
-        } catch (NumberFormatException e) {
-            dialogContainer.getChildren().addAll(
-                DialogBox.getDukeDialog(e.getMessage(), dukeImage)
             );
         } catch (Exception e) {
             dialogContainer.getChildren().addAll(

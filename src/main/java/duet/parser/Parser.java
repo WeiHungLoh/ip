@@ -53,7 +53,7 @@ public class Parser {
         case "event":
             return getEventTask(storage, dates, messages);
         case "todo":
-            return getToDoTask(storage, messages, command); 
+            return getToDoTask(storage, messages, command);
         case "delete":
             if (command.length > 1 && command[1].contains(",")) {
                 return getMultipleDeletedTasks(storage, messages, message, command);
@@ -77,7 +77,7 @@ public class Parser {
      */
     public static String getTaskList(TaskList messages) {
         String desc = "";
-        desc += "Here are the tasks in your list:\n";
+        desc += "You are so close to completing it! I CAN DO IT!.\nHere are the tasks in your list:\n";
         for (int i = 0; i < messages.size(); i++) {
             String index = String.valueOf(i + 1);
             Task taskName = messages.get(i);
@@ -110,7 +110,7 @@ public class Parser {
         }
 
         if (newTasks.size() > 0) {
-            desc += "Here are the matching tasks in your list:\n";
+            desc += "YOU CAN DO IT! Here are the matching tasks in your list:\n";
             for (Task task : newTasks) {
                 desc += task.toString() + "\n";
             }
@@ -140,13 +140,14 @@ public class Parser {
             if (taskNum > messages.size() || taskNum < 1) {
                 throw new InvalidInputException("Task that you want to mark does not exist");
             }
-        } catch(InvalidInputException e) {
+        } catch (InvalidInputException e) {
             return e.getMessage();
-        } 
+        }
 
         storage.save(messages.getTasks());
         messages.get(idx).markAsDone();
-        return "Nice! I've marked this task as done:\n" + "  [" + messages.get(idx).getStatusIcon() + "] "
+        return "I CAN DO IT. SO CLOSE TO COMPLETING\nNice! I've marked this task as done:\n"
+                + "  [" + messages.get(idx).getStatusIcon() + "] "
                 + messages.get(idx).getDescription();
     }
 
@@ -174,20 +175,20 @@ public class Parser {
                 taskList += " [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription();
             }
             storage.save(messages.getTasks());
-            return "Nice! I've marked these tasks as done:\n" + taskList;
+            return "I CAN DO IT SO CLOSE TO COMPLETING!\nNice! I've marked these tasks as done:\n" + taskList;
         } catch (InvalidInputException e) {
             return e.getMessage();
         }
     }
 
-     /**
+    /**
      * Returns a string consists of tasks unmarked as done.
      *
      * @param storage Storage to save and load tasks from a file path.
      * @param messages A TaskList of inputs.
      * @param command A String array of command by user.
      * @return A string consists of a task unmarked as done.
-     */
+    */
     public static String getUnmarkedTask(Storage storage, TaskList messages, String[] command) {
         if (command[1].length() > 1 && command[1].contains(",")) {
             return getUnmarkedTasks(storage, messages, command);
@@ -200,17 +201,17 @@ public class Parser {
             if (taskNum > messages.size() || taskNum < 1) {
                 throw new InvalidInputException("Task that you want to unmark does not exist");
             }
-        } catch(InvalidInputException e) {
+        } catch (InvalidInputException e) {
             return e.getMessage();
         }
 
         messages.get(idx).unmarkAsDone();
         storage.save(messages.getTasks());
-        return "OK, I've marked this task as not done yet:\n" + " [" + messages.get(idx).getStatusIcon()
+        return "YOU CAN DO IT!\nOK, I've marked this task as not done yet:\n" + " [" + messages.get(idx).getStatusIcon()
                 + "] " + messages.get(idx).getDescription();
     }
 
-       /**
+    /**
      * Returns a list of String of tasks unmarked as done.
      *
      * @param storage Storage to save and load tasks.
@@ -234,8 +235,8 @@ public class Parser {
                 taskList += " [" + messages.get(idx).getStatusIcon() + "] " + messages.get(idx).getDescription();
             }
             storage.save(messages.getTasks());
-            return "Nice! I've unmarked these tasks:\n" + taskList;
-        } catch(InvalidInputException e) {
+            return "YOU CAN DO IT!\nNice! I've unmarked these tasks:\n" + taskList;
+        } catch (InvalidInputException e) {
             return e.getMessage();
         }
     }
@@ -275,7 +276,7 @@ public class Parser {
         String otherDesc = "";
         otherDesc += updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
-        return "Got it. I've added this task:\n " + currentTask.toString()
+        return "YOU CAN DO IT!\nGot it. I've added this task:\n " + currentTask.toString()
                 + "\n" + otherDesc;
     }
 
@@ -331,8 +332,7 @@ public class Parser {
         try {
             if (dates.length == 1) {
                 throw new EmptyInputException("Event must have a description, start and end date");
-            }
-            else if (dates.length < 3) {
+            } else if (dates.length < 3) {
                 throw new InvalidInputException("Event must have a start and end date in YYYY-MM-dd format");
             }
         } catch (EmptyInputException | InvalidInputException e) {
@@ -350,10 +350,10 @@ public class Parser {
         String otherDesc = "";
         otherDesc += updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
-        return "Got it. I've added this task:\n" + " " + currentTask.toString() + "\n"
+        return "I CAN DO IT!\n. Got it. I've added this task:\n" + " " + currentTask.toString() + "\n"
                 + "\n" + otherDesc;
     }
-    
+
     /**
      * Returns a String consists of end date for event task.
      *
@@ -463,7 +463,7 @@ public class Parser {
         String otherDesc = "";
         otherDesc += updateCurrentTaskMessage(messages, otherDesc);
         storage.save(messages.getTasks());
-        return "Noted. I've removed this task:\n" + " " + deletedTask.toString()
+        return "SO CLOSE YOU CAN DO IT!\nNoted. I've removed this task:\n" + " " + deletedTask.toString()
                 + "\n" + otherDesc;
     }
 
@@ -501,7 +501,7 @@ public class Parser {
         }
         storage.save(messages.getTasks());
         otherDesc += updateCurrentTaskMessage(messages, otherDesc);
-        return "Noted. I've removed these tasks:\n" + deletedTaskList + "\n" + otherDesc;
+        return "SEE YOU CAN DO IT!\nNoted. I've removed these tasks:\n" + deletedTaskList + "\n" + otherDesc;
     }
 
     /**
@@ -514,10 +514,10 @@ public class Parser {
         for (int j = 0; j < tasksIdx.length; j++) {
             for (int k = j + 1; k < tasksIdx.length; k++) {
                 if (tasksIdx[j] == tasksIdx[k]) {
-                   return true;
+                    return true;
                 }
             }
-        } 
+        }
         return false;
     }
 
@@ -528,7 +528,7 @@ public class Parser {
      * @throws InvalidInputException If unknown command is called.
      */
     public static String getInvalidCommand() throws InvalidInputException {
-        try { 
+        try {
             throw new InvalidInputException("Please enter a valid command");
         } catch (InvalidInputException e) {
             return e.getMessage();
