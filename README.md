@@ -1,53 +1,26 @@
-# Duet Chatbot :+1:
-A ~smart~ super *duper* smart chatbot with task management capabilities, such as creating To-Do, Deadline and Event tasks. 
+# Duke project template
 
-## How it works:
-1. Deadline, todo, event commands:
-- To add a deadline task, type `"deadline <task name> /by <YYYY-MM-DD>"`
-- To add a todo task, type `"todo <task name>"`
-- To add an event task, type `"event <task name> /from <YYYY-MM-DD> /to <YYYY-MM-DD>"`
+This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
 
-2. List command:
-- To view the list of tasks you have added, type "list"
+## Setting up in Intellij
 
-3. Mark, unmark, and delete commands:
-- To mark task as done, type "mark 1" where "1" is the index of task
-- To unmark task, type "unmark 1" where "1" is the index of task
-- To delete a task, type "delete 1" where "1" is the index of task
-- To mark, unmark or delete more than 1 tasks at a time, type "mark 1,2,3", "unmark 1,2,3", "delete 1,2,3" where "1,2,3" refer to the indices of existing tasks
+Prerequisites: JDK 17, update Intellij to the most recent version.
 
-> For all commands above, please type in lowercase. Do include a space in between command type, task index, and task name. Failure to do so will cause Duet Chatbot to be unable to recognise your command
-> Do type "list" to check the tasks you have. Marking, unmarking or deleting any tasks that you do not have will cause an error
+1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
+1. Open the project into Intellij as follows:
+   1. Click `Open`.
+   1. Select the project directory, and click `OK`.
+   1. If there are any further prompts, accept the defaults.
+1. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
+   In the same dialog, set the **Project language level** field to the `SDK default` option.
+1. After that, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
+   ```
+   Hello from
+    ____        _        
+   |  _ \ _   _| | _____ 
+   | | | | | | | |/ / _ \
+   | |_| | |_| |   <  __/
+   |____/ \__,_|_|\_\___|
+   ```
 
-## Examples
-### Valid Commands
-🙆‍♂️ `todo do homework`  
-🙆‍♂️ `deadline submit homework /by 2025-05-30`  
-🙆‍♂️ `event family vacation /from 2025-06-01 /to 2025-06-15`  
-🙆‍♂️ `mark 1,5,6`  
-🙆‍♂️ `delete 3,2,1`  
-
-### Invalid Commands
-🙅‍♂️ `TODO readbook` (uppercase not allowed)  
-🙅‍♂️ `deadlinedohomework /by 2025-02-28` (no space in between command type and task name)  
-🙅‍♂️ `event go overseas /from 2025-02-01` (no end date)  
-🙅‍♂️ `deadline do tutorial` (no due date)  
-🙅‍♂️ `event go overseas /to 2025-02-29` (no start date)  
-
-## Quick References
-📝 `todo <task name>`  
-⏰ `deadline <task name> /by <YYYY-MM-DD>`  
-📆 `event <task name> /by <YYYY-MM-DD> /to <YYYY-MM-DD>`  
-📁 `list`  
-❎ `mark <task index>`  
-⚪ `unmark <task index>`  
-🗑️ `delete <task index>`  
-
-## Common Error Messages
-If you receive an error message:
-1. Check that all commands are in lowercase
-2. Verify spaces between all components
-3. Ensure dates are in YYYY-MM-DD format
-4. Confirm task indices exist in your list
-
-
+**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
