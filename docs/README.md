@@ -16,6 +16,9 @@ A ~smart~ super *duper* smart chatbot with task management capabilities, such as
 - To delete a task, type "delete 1" where "1" is the index of task
 - To mark, unmark or delete more than 1 tasks at a time, type "mark 1,2,3", "unmark 1,2,3", "delete 1,2,3" where "1,2,3" refer to the indices of existing tasks
 
+4. Find commmand:
+- To find a certain task, type `"find <keyword>"`
+
 > For all commands above, please type in lowercase. Do include a space in between command type, task index, and task name. Failure to do so will cause Duet Chatbot to be unable to recognise your command
 > Do type "list" to check the tasks you have. Marking, unmarking or deleting any tasks that you do not have will cause an error
 
@@ -42,6 +45,7 @@ A ~smart~ super *duper* smart chatbot with task management capabilities, such as
 ❎ `mark <task index>`  
 ⚪ `unmark <task index>`  
 🗑️ `delete <task index>`  
+🗣️ `find <keyword>`  
 
 ## Common Error Messages
 If you receive an error message:
