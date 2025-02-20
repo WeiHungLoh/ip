@@ -1,11 +1,14 @@
 package duet.parser;
 
+import java.util.ArrayList;
+
 import duet.exception.EmptyInputException;
 import duet.task.Task;
 import duet.task.TaskList;
 
-import java.util.ArrayList;
-
+/**
+ * Represents a class to handle find commands.
+ */
 public class FindParser {
     /**
      * Returns a list of find results that match a keyword.

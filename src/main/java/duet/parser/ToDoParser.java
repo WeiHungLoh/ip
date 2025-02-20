@@ -6,6 +6,9 @@ import duet.task.Task;
 import duet.task.TaskList;
 import duet.task.ToDo;
 
+/**
+ * Represents a class to handle ToDo commands.
+ */
 public class ToDoParser {
     public static String getToDoTask(Storage storage, TaskList messages, String[] command)
                 throws EmptyInputException {

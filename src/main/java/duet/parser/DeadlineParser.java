@@ -1,5 +1,8 @@
 package duet.parser;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import duet.exception.EmptyInputException;
 import duet.exception.InvalidInputException;
 import duet.storage.Storage;
@@ -7,9 +10,9 @@ import duet.task.Deadline;
 import duet.task.Task;
 import duet.task.TaskList;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
+/**
+ * Represents a class to handle deadline commands.
+ */
 public class DeadlineParser {
     /**
      * Returns the description and deadline of task that has been added.

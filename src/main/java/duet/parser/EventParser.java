@@ -1,5 +1,8 @@
 package duet.parser;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import duet.exception.EmptyInputException;
 import duet.exception.InvalidInputException;
 import duet.storage.Storage;
@@ -7,9 +10,9 @@ import duet.task.Event;
 import duet.task.Task;
 import duet.task.TaskList;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
+/**
+ * Represents a class that parses event commands.
+ */
 public class EventParser {
     /**
      * Returns a String consists of event description, start and end dates.

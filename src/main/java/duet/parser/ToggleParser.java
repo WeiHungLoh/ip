@@ -4,6 +4,9 @@ import duet.exception.InvalidInputException;
 import duet.storage.Storage;
 import duet.task.TaskList;
 
+/**
+ * Represents a class that handles the marking and deletion of task commands.
+ */
 public class ToggleParser {
     /**
      * Returns a string consists of tasks marked as done.

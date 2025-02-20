@@ -1,13 +1,16 @@
 package duet.parser;
 
+import java.util.ArrayList;
+
 import duet.exception.EmptyInputException;
 import duet.exception.InvalidInputException;
 import duet.storage.Storage;
 import duet.task.Task;
 import duet.task.TaskList;
 
-import java.util.ArrayList;
-
+/**
+ * Represents a class that handles delete commands.
+ */
 public class DeleteParser {
     public static String getDeletedTask(Storage storage, TaskList messages,
                                         String message, String[] command) {
